@@ -1,5 +1,5 @@
 """
-WSGI config for cce_2023_registration project.
+WSGI config for deleted project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
