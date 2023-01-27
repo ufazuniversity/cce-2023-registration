@@ -2,9 +2,15 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 
 
+class TicketType(models.Model):
+    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+
+
 class Ticket(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
+    type = models.ForeignKey(TicketType, on_delete=models.PROTECT, null=True, blank=False)
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     active = models.BooleanField(default=True)
@@ -26,7 +32,9 @@ class Order(models.Model):
         max_digits=8, decimal_places=2, null=False, editable=False
     )
     datetime = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(choices=STATUS_CHOICES, max_length=12, null=False, default="pending")
+    status = models.CharField(
+        choices=STATUS_CHOICES, max_length=12, null=False, default="pending"
+    )
 
 
 class Refund(models.Model):
