@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-&!$%afenbq^ehf0^e!r%!gm)!%!r%3p*vu8(a!2q8@ro145h19
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=list, default=[])
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=list, default=[])
 
 
 # Application definition
@@ -125,5 +125,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+PAYRIFF_BASE_URL = "https://api.payriff.com/api/v2/"
+PAYRIFF_CREATE_ORDER_URL = f"{PAYRIFF_BASE_URL}/createOrder"
+PAYRIFF_REFUND_URL = f"{PAYRIFF_BASE_URL}/refund"
 PAYRIFF_SECRET = config("PAYRIFF_SECRET")
 PAYRIFF_MERCHANT_ID = config("PAYRIFF_MERCHANT_ID")
+ORDER_CURRENCY = "AZN"
+ORDER_DESCRIPTION = config("ORDER_DESCRIPTION", default="CCE'23 Registration")
