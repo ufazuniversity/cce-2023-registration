@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                     "order",
                     models.OneToOneField(
                         on_delete=django.db.models.deletion.PROTECT,
-                        to="registration.order",
+                        to="core.order",
                     ),
                 ),
             ],
@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
             model_name="order",
             name="ticket",
             field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT, to="registration.ticket"
+                on_delete=django.db.models.deletion.PROTECT, to="core.ticket"
             ),
         ),
         migrations.AddField(
