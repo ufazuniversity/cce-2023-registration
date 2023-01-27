@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth import models as auth_models
+from solo.models import SingletonModel
+
+
+class RegistrationSettings(SingletonModel):
+    is_registration_active = models.BooleanField(default=False)
 
 
 class TicketType(models.Model):
@@ -10,7 +15,9 @@ class TicketType(models.Model):
 class Ticket(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    type = models.ForeignKey(TicketType, on_delete=models.PROTECT, null=True, blank=False)
+    type = models.ForeignKey(
+        TicketType, on_delete=models.PROTECT, null=True, blank=False
+    )
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     active = models.BooleanField(default=True)
