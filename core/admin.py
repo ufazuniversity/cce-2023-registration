@@ -1,7 +1,9 @@
 from django.contrib import admin
-# import .models
-#
-#
-# @admin.register(models.Ticket)
-# class TicketAdmin(admin.ModelAdmin):
-#     pass
+from core import models
+from solo.admin import SingletonModelAdmin
+
+
+admin.site.register(models.Ticket, admin.ModelAdmin)
+admin.site.register(models.Order, admin.ModelAdmin)
+admin.site.register(models.Refund, admin.ModelAdmin)
+admin.site.register(models.RegistrationSettings, SingletonModelAdmin)
