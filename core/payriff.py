@@ -57,8 +57,6 @@ def create_order(
         declineURL=declineURL,
         language=language,
     )
-    print(payload)
-    print(secret)
     r = requests.post(
         settings.PAYRIFF_CREATE_ORDER_URL,
         headers=request_header(secret),
