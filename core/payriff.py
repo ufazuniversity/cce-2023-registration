@@ -1,16 +1,16 @@
+import typing
+
 import requests
 import json
 import logging
 from django.conf import settings
-
-logger = logging.getLogger(__name__)
 
 
 def request_header(secret: str):
     return {"Authorization": secret, "Content-type": "application/json"}
 
 
-def order_json_payload(
+def order_payload(
     amount: float,
     currency: str,
     description: str,
@@ -20,7 +20,7 @@ def order_json_payload(
     declineURL: str,
     language: str,
 ) -> str:
-    d = {
+    ret = {
         "body": {
             "amount": amount,
             "currencyType": currency,
@@ -32,7 +32,7 @@ def order_json_payload(
         },
         "merchant": merchant_id,
     }
-    return json.dumps(d)
+    return json.dumps(ret)
 
 
 def create_order(
@@ -45,24 +45,28 @@ def create_order(
     approveURL: str = settings.PAYRIFF_APPROVE_URL,
     cancelURL: str = settings.PAYRIFF_CANCEL_URL,
     declineURL: str = settings.PAYRIFF_DECLINE_URL,
-    language: str = settings.PAYRIFF_DEFAULT_LANGUAGE,
-):
-    try:
-        payload = order_json_payload(
-            amount=amount,
-            currency=currency,
-            description=description,
-            merchant_id=merchant_id,
-            approveURL=approveURL,
-            cancelURL=cancelURL,
-            declineURL=declineURL,
-            language=language,
-        )
-        r = requests.post(
-            settings.PAYRIFF_BASE_URL,
-            headers=request_header(secret),
-            data=order_json_payload(amount, currency, description, merchant_id),
-            timeout=timeout,
-        )
-    except requests.exceptions.Timeout:
-        logger.error("Request timed out.")
+    language: str = settings.PAYRIFF_LANGUAGE,
+) -> typing.Tuple[str, str, str]:
+    payload = order_payload(
+        amount=amount,
+        currency=currency,
+        description=description,
+        merchant_id=merchant_id,
+        approveURL=approveURL,
+        cancelURL=cancelURL,
+        declineURL=declineURL,
+        language=language,
+    )
+    print(payload)
+    print(secret)
+    r = requests.post(
+        settings.PAYRIFF_CREATE_ORDER_URL,
+        headers=request_header(secret),
+        data=payload,
+        timeout=timeout,
+    )
+    # raise an exception when status code is other than 200
+    r.raise_for_status()
+
+    payload = r.json()["payload"]
+    return payload["orderId"], payload["sessionId"], payload["paymentUrl"]
