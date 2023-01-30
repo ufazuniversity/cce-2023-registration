@@ -23,12 +23,14 @@ def buy_ticket(request, pk):
     user = request.user
 
     try:
+        # Return 404 if ticket is not found
         ticket = models.Ticket.objects.get(pk=pk)
     except models.Ticket.DoesNotExist:
         return http.HttpResponseNotFound(f"Did not find a ticket with the ID, {pk}")
 
     if request.method == "POST":
         try:
+            # Create pending order and redirect to the acquired paymentUrl
             order_id, session_id, payment_url = payriff.create_order(ticket.price)
             models.Order.objects.create(
                 user=user, order_id=order_id, session_id=session_id, ticket=ticket
