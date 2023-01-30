@@ -45,7 +45,8 @@ class Order(models.Model):
     paid_amount = models.DecimalField(
         max_digits=8, decimal_places=2, null=False, editable=False
     )
-    datetime = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
         choices=STATUS_CHOICES, max_length=12, null=False, default="pending"
     )
