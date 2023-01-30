@@ -1,6 +1,7 @@
 import logging
 
 from django import shortcuts
+from django import http
 from django.shortcuts import render
 from django.views.decorators import http as http_decorators
 from django.contrib.auth import decorators
@@ -20,10 +21,12 @@ def index(request):
 @decorators.login_required()
 def buy_ticket(request, pk):
     user = request.user
+
     try:
         ticket = models.Ticket.objects.get(pk=pk)
     except models.Ticket.DoesNotExist:
-        return
+        return http.HttpResponseNotFound(f"Did not find a ticket with the ID, {pk}")
+
     if request.method == "POST":
         try:
             order_id, session_id, payment_url = payriff.create_order(ticket.price)
