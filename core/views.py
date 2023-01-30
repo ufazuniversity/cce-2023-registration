@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    shortcuts.render("core/index.html")
+    return shortcuts.render(request, "core/index.html")
 
 
 @http.require_http_methods(["GET", "POST"])
