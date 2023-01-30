@@ -125,7 +125,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-PAYRIFF_BASE_URL = "https://api.payriff.com/api/v2/"
+PAYRIFF_BASE_URL = "https://api.payriff.com/api/v2"
 PAYRIFF_CREATE_ORDER_URL = f"{PAYRIFF_BASE_URL}/createOrder"
 PAYRIFF_REFUND_URL = f"{PAYRIFF_BASE_URL}/refund"
 PAYRIFF_SECRET = config("PAYRIFF_SECRET")
