@@ -2,7 +2,7 @@ import logging
 
 from django import shortcuts
 from django.shortcuts import render
-from django.views.decorators import http
+from django.views.decorators import http as http_decorators
 from django.contrib.auth import decorators
 from requests import exceptions
 
@@ -16,11 +16,14 @@ def index(request):
     return shortcuts.render(request, "core/index.html")
 
 
-@http.require_http_methods(["GET", "POST"])
+@http_decorators.require_http_methods(["GET", "POST"])
 @decorators.login_required()
 def buy_ticket(request, pk):
     user = request.user
-    ticket = models.Ticket.objects.get(pk=pk)
+    try:
+        ticket = models.Ticket.objects.get(pk=pk)
+    except models.Ticket.DoesNotExist:
+        return
     if request.method == "POST":
         try:
             order_id, session_id, payment_url = payriff.create_order(ticket.price)
