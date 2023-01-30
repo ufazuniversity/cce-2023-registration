@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_browser_reload",
+    "ckeditor",
     "core",
     "solo",
 ]
@@ -124,10 +125,14 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+STATIC_ROOT = BASE_DIR / "static"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# PAYRIFF configuration
 
 PAYRIFF_BASE_URL = "https://api.payriff.com/api/v2"
 PAYRIFF_CREATE_ORDER_URL = f"{PAYRIFF_BASE_URL}/createOrder"

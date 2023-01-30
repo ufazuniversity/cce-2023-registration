@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import models as auth_models
 from solo.models import SingletonModel
+from ckeditor import fields as ck_fields
 
 
 class RegistrationSettings(SingletonModel):
@@ -14,7 +15,7 @@ class TicketType(models.Model):
 
 class Ticket(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
+    description = ck_fields.RichTextField(null=True, blank=True)
     type = models.ForeignKey(
         TicketType, on_delete=models.PROTECT, null=True, blank=False
     )
