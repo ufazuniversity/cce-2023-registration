@@ -18,5 +18,6 @@ from django import urls
 
 urlpatterns = [
     urls.path("admin/", admin.site.urls),
+    urls.path("__reload__/", urls.include("django_browser_reload.urls")),
     urls.path("", urls.include("core.urls")),
 ]
