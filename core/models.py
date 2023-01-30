@@ -32,10 +32,14 @@ class Order(models.Model):
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
     order_id = models.IntegerField(
-        verbose_name="Payriff order ID", null=False, editable=False
+        verbose_name="Payriff order ID", null=False, editable=False, unique=True
     )
     session_id = models.CharField(
-        verbose_name="Payriff session ID", max_length=50, editable=False, null=True
+        verbose_name="Payriff session ID",
+        max_length=50,
+        editable=False,
+        null=True,
+        unique=True,
     )
     ticket = models.ForeignKey(Ticket, on_delete=models.PROTECT)
     paid_amount = models.DecimalField(
