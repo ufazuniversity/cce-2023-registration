@@ -30,7 +30,7 @@ def buy_ticket(request, pk):
     if request.method == "POST":
         try:
             order_id, session_id, payment_url = payriff.create_order(ticket.price)
-            order = models.Order.objects.create(
+            models.Order.objects.create(
                 user=user, order_id=order_id, session_id=session_id, ticket=ticket
             )
             return shortcuts.redirect(payment_url)
