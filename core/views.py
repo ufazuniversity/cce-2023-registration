@@ -48,8 +48,7 @@ def buy_ticket(request, pk):
                 user=user, order_id=order_id, session_id=session_id, ticket=ticket
             )
             return shortcuts.redirect(payment_url)
-        except exceptions.Timeout:
-            logger.error("Request timed out")
-        except exceptions.HTTPError as e:
+        except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
+
     return render(request, "core/ticket.html", context={"ticket": ticket})
