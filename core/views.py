@@ -17,6 +17,18 @@ def index(request):
     return shortcuts.render(request, "core/index.html")
 
 
+def tickets(request):
+    return shortcuts.render(request, "core/tickets.html")
+
+
+def account(request):
+    return shortcuts.render(request, "core/account.html")
+
+
+def invoice(request):
+    return shortcuts.render(request, "core/invoice.html")
+
+
 @http_decorators.require_http_methods(["GET", "POST"])
 @decorators.login_required()
 def buy_ticket(request, pk):
