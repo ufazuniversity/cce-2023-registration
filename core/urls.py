@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
     urls.path("", views.index, name="index"),
-    urls.path("tickets/buy/<int:pk>", views.buy_ticket, name="buy-ticket"),
+    urls.path("tickets/<int:pk>/buy", views.buy_ticket, name="buy-ticket"),
 ]
