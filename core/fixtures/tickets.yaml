@@ -1,0 +1,43 @@
+- model: core.ticket
+  pk: 1
+  fields:
+    name: "Free"
+    description: "Free for online viewing of presentation"
+    is_paid: False
+
+- model: core.ticket
+  pk: 2
+  fields:
+    name: "On-site complete for students"
+    description: 'David subscribes to the "stuff your tent into the bag" strategy over nicely folding it.'
+    is_paid: True
+    price: 140
+    variant: "student"
+
+- model: core.ticket
+  pk: 3
+  fields:
+    name: "On-site complete for non-students"
+    description: "The white water rafting trip was suddenly halted by the unexpected brick wall."
+    is_paid: True
+    price: 280
+    variant: "others"
+
+- model: core.ticket
+  pk: 4
+  fields:
+    name: "Ticket 2 for students"
+    description: "The miniature pet elephant became the envy of the neighborhood."
+    is_paid: True
+    price: 80
+    variant: "student"
+
+- model: core.ticket
+  pk: 5
+  fields:
+    name: "Ticket 2 for students"
+    description: "The miniature pet elephant became the envy of the neighborhood."
+    is_paid: True
+    price: 100
+    variant: "other"
+
