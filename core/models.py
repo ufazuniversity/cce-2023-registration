@@ -21,7 +21,7 @@ class Ticket(models.Model):
     )
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
 
 class Order(models.Model):
