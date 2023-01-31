@@ -3,7 +3,15 @@ from core import models
 from solo.admin import SingletonModelAdmin
 
 
-admin.site.register(models.Ticket, admin.ModelAdmin)
-admin.site.register(models.Order, admin.ModelAdmin)
+@admin.register(models.Ticket)
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ["name", "is_paid", "price", "is_active", "variant"]
+
+
+@admin.register(models.Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ["order_id", "ticket", "paid_amount", "status", "updated"]
+
+
 admin.site.register(models.Refund, admin.ModelAdmin)
 admin.site.register(models.RegistrationSettings, SingletonModelAdmin)
