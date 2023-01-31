@@ -15,7 +15,12 @@ class Ticket(models.Model):
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    variant = models.CharField(max_length=20, choices=VARIANT_CHOICES, null=True, blank=True)
+    variant = models.CharField(
+        max_length=20, choices=VARIANT_CHOICES, null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -46,8 +51,14 @@ class Order(models.Model):
         choices=STATUS_CHOICES, max_length=12, null=False, default="pending"
     )
 
+    def __str__(self):
+        return self.order_id
+
 
 class Refund(models.Model):
     order = models.OneToOneField(Order, on_delete=models.PROTECT)
     datetime = models.DateTimeField(auto_now_add=True)
     reason = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.order_id
