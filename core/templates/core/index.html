@@ -1,13 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% comment %}
-    <div class="py-4">
-        <div>
-            <h1 class="display-3 text-center">Available Tickets</h1>
-        </div>
-    </div>
-    {% endcomment %}
     <section class="container tickets py-4 mx-auto">
         <h2 class="display-5 text-center">Free Tickets</h2>
         <div class="my-4">{% include 'core/includes/tickets.html' with tickets=free_tickets %} </div>
