@@ -11,6 +11,7 @@ class RegistrationSettings(SingletonModel):
 class Ticket(models.Model):
     VARIANT_CHOICES = (("student", "Student"), ("other", "Other"))
     name = models.CharField(max_length=255)
+    summary = models.CharField(max_length=255, null=True, blank=True)
     description = ck_fields.RichTextField(null=True, blank=True)
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
