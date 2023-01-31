@@ -1,6 +1,10 @@
 <div class="card mx-auto my-2 border-info">
     <div class="card-body">
-        <h4 class="card-title">{{ ticket.name }}</h4>
+        <h4 class="card-title">
+            <a class="text-dark text-decoration-none" href="{% url 'buy-ticket' ticket.id %}">
+                {{ ticket.name }}
+            </a>
+        </h4>
         {% if ticket.summary %}
         <p class="card-text">{{ ticket.summary }}</p>
         {% endif %}
