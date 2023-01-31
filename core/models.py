@@ -9,11 +9,13 @@ class RegistrationSettings(SingletonModel):
 
 
 class Ticket(models.Model):
+    VARIANT_CHOICES = (("student", "Student"), ("other", "Other"))
     name = models.CharField(max_length=255)
     description = ck_fields.RichTextField(null=True, blank=True)
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    variant = models.CharField(max_length=20, choices=VARIANT_CHOICES, null=True, blank=True)
 
 
 class Order(models.Model):
