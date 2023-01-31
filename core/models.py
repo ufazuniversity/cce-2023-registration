@@ -8,17 +8,9 @@ class RegistrationSettings(SingletonModel):
     is_registration_active = models.BooleanField(default=False)
 
 
-class TicketType(models.Model):
-    code = models.CharField(max_length=20)
-    name = models.CharField(max_length=50)
-
-
 class Ticket(models.Model):
     name = models.CharField(max_length=255)
     description = ck_fields.RichTextField(null=True, blank=True)
-    type = models.ForeignKey(
-        TicketType, on_delete=models.PROTECT, null=True, blank=False
-    )
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     is_active = models.BooleanField(default=True)
