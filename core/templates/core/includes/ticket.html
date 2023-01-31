@@ -1,0 +1,8 @@
+<div class="card mx-auto my-2 border-info">
+    <div class="card-body">
+        <h4 class="card-title">{{ ticket.name }}</h4>
+        {% if ticket.summary %}
+        <p class="card-text">{{ ticket.summary }}</p>
+        {% endif %}
+    </div>
+</div>

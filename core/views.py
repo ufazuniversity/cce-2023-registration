@@ -14,11 +14,17 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    return shortcuts.render(request, "core/index.html")
-
-
-def tickets(request):
-    return shortcuts.render(request, "core/tickets.html")
+    tickets = models.Ticket.objects.all().values()
+    free_tickets = tickets.filter(is_paid=False)
+    student_tickets = tickets.filter(variant="student")
+    other_tickets = tickets.filter(variant="other")
+    ctx = {
+        "tickets": tickets,
+        "free_tickets": free_tickets,
+        "student_tickets": student_tickets,
+        "other_tickets": other_tickets,
+    }
+    return shortcuts.render(request, "core/index.html", context=ctx)
 
 
 def account(request):
