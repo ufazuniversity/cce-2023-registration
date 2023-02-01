@@ -10,6 +10,7 @@ class RegistrationSettings(SingletonModel):
 
 class Ticket(models.Model):
     VARIANT_CHOICES = (("student", "Student"), ("other", "Other"))
+    LOCALITY_CHOICES = (("online", "Online"), ("in-person", "In-person"))
     name = models.CharField(max_length=255)
     summary = models.CharField(max_length=255, null=True, blank=True)
     description = ck_fields.RichTextField(null=True, blank=True)
@@ -22,6 +23,7 @@ class Ticket(models.Model):
     )
     is_limited = models.BooleanField(default=False)
     no_available = models.PositiveIntegerField("Number of available tickets", null=True, blank=True)
+    locality = models.CharField(max_length=20, choices=LOCALITY_CHOICES, default="online")
 
     def __str__(self):
         return self.name
