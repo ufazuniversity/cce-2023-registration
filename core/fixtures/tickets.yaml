@@ -1,43 +1,75 @@
 - model: core.ticket
   pk: 1
   fields:
-    name: "Free"
-    description: "Free for online viewing of presentation"
+    name: "Non-presenter participants"
+    locality: "online"
     is_paid: False
 
 - model: core.ticket
   pk: 2
   fields:
-    name: "On-site complete for students"
-    description: 'David subscribes to the "stuff your tent into the bag" strategy over nicely folding it.'
+    name: "Non academic participants"
+    locality: "in-person"
     is_paid: True
-    price: 140
-    variant: "student"
+    price: 925
+    price_text: "500€ (925 AZN)"
+    variant: "other"
 
 - model: core.ticket
   pk: 3
   fields:
-    name: "On-site complete for non-students"
-    description: "The white water rafting trip was suddenly halted by the unexpected brick wall."
+    name: "Academic attendees (researchers, lecturers, assistant professors, associate professors, professors, …)"
+    locality: "in-person"
     is_paid: True
-    price: 280
-    variant: "others"
+    price: 555
+    price_text: "300€ (555 AZN)"
+    variant: "other"
 
 - model: core.ticket
   pk: 4
   fields:
-    name: "Ticket 2 for students"
-    description: "The miniature pet elephant became the envy of the neighborhood."
+    name: "Student co-authors (Bachelor, Master or PhD students with a valid student ID at the moment of registration)"
+    locality: "in-person"
     is_paid: True
-    price: 80
+    price: 370
+    price_text: "200€ (370 AZN)"
     variant: "student"
 
 - model: core.ticket
   pk: 5
   fields:
-    name: "Ticket 2 for students"
-    description: "The miniature pet elephant became the envy of the neighborhood."
+    name: "Student non-co-authors (with a valid student ID at the moment of registration)"
+    locality: "in-person"
     is_paid: True
-    price: 100
-    variant: "other"
+    price: 277
+    price_text: "150€ (277 AZN)"
+    variant: "student"
+
+- model: core.ticket
+  pk: 6
+  fields:
+    name: "Azerbaijan residents (social event + dinner to be purchased separately)"
+    locality: "in-person"
+    is_paid: True
+    price: 200
+    variant: "student"
+
+- model: core.ticket
+  pk: 7
+  fields:
+    name: "Academic presenters"
+    locality: online
+    is_paid: True
+    price: 185
+    price_text: "100€ (185 AZN)"
+    variant: "student"
+
+- model: core.ticket
+  pk: 8
+  fields:
+    name: "Participation to social event + dinner (for accompanying spouses / partners)"
+    locality: in-person
+    is_paid: True
+    price: 130
+    price_text: "70€ (130 AZN)"
 
