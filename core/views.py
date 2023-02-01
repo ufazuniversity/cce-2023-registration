@@ -16,13 +16,11 @@ logger = logging.getLogger(__name__)
 def index(request):
     tickets = models.Ticket.objects.all()
     free_tickets = tickets.filter(is_paid=False)
-    student_tickets = tickets.filter(variant="student")
-    other_tickets = tickets.filter(variant="other")
+    paid_tickets = tickets.filter(is_paid=True)
     ctx = {
         "tickets": tickets,
         "free_tickets": free_tickets,
-        "student_tickets": student_tickets,
-        "other_tickets": other_tickets,
+        "paid_tickets": paid_tickets,
     }
     return shortcuts.render(request, "core/index.html", context=ctx)
 
