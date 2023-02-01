@@ -1,4 +1,7 @@
 <div class="card mx-auto my-2 border-info">
+    <div class="card-header">
+        <strong>{{ ticket.locality }}</strong>
+    </div>
     <div class="card-body">
         <h4 class="card-title">
             <a class="text-dark text-decoration-none" href="{% url 'buy-ticket' ticket.id %}">
@@ -8,8 +11,8 @@
         {% if ticket.summary %}
         <p class="card-text">{{ ticket.summary }}</p>
         {% endif %}
-        {% if is_paid %}
-        <div class="price text-info me-2">{{ ticket.price }} AZN</div>
+        {% if ticket.is_paid %}
+        <div class="price text-info me-2">{{ ticket.visual_price }}</div>
         {% endif %}
     </div>
     <div class="card-footer d-flex justify-content-between align-items-center">

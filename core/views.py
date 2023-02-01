@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    tickets = models.Ticket.objects.all().values()
+    tickets = models.Ticket.objects.all()
     free_tickets = tickets.filter(is_paid=False)
     student_tickets = tickets.filter(variant="student")
     other_tickets = tickets.filter(variant="other")

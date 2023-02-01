@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 from solo.models import SingletonModel
 from ckeditor import fields as ck_fields
+from django.conf import settings
 
 
 class RegistrationSettings(SingletonModel):
@@ -22,11 +23,19 @@ class Ticket(models.Model):
         max_length=20, choices=VARIANT_CHOICES, null=True, blank=True
     )
     is_limited = models.BooleanField(default=False)
-    no_available = models.PositiveIntegerField("Number of available tickets", null=True, blank=True)
-    locality = models.CharField(max_length=20, choices=LOCALITY_CHOICES, default="online")
+    no_available = models.PositiveIntegerField(
+        "Number of available tickets", null=True, blank=True
+    )
+    locality = models.CharField(
+        max_length=20, choices=LOCALITY_CHOICES, default="online"
+    )
 
     def __str__(self):
         return self.name
+
+    @property
+    def visual_price(self):
+        return self.price_text or f"{self.price} {settings.PAYRIFF_CURRENCY}"
 
 
 class Order(models.Model):
