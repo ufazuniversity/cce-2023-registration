@@ -15,6 +15,7 @@ class Ticket(models.Model):
     description = ck_fields.RichTextField(null=True, blank=True)
     is_paid = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    price_text = models.CharField(max_length=20, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     variant = models.CharField(
         max_length=20, choices=VARIANT_CHOICES, null=True, blank=True
