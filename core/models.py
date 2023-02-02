@@ -88,6 +88,13 @@ class StudentParticipant(models.Model):
     student_id = models.CharField(max_length=50)
 
 
+class MealPreference(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.PROTECT)
+    allergies = models.TextField(null=True, blank=True)
+    special_request = models.TextField(null=True, blank=True, help_text="E.g halal, kosher, vegetarian etc.")
+
+
+
 class Refund(models.Model):
     order = models.OneToOneField(Order, on_delete=models.PROTECT)
     datetime = models.DateTimeField(auto_now_add=True)
