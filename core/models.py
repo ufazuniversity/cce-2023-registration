@@ -3,6 +3,7 @@ from django.contrib.auth import models as auth_models
 from solo.models import SingletonModel
 from ckeditor import fields as ck_fields
 from django.conf import settings
+from phonenumber_field import modelfields as pn_fields
 
 
 class RegistrationSettings(SingletonModel):
@@ -68,6 +69,22 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_id
+
+
+class Participant(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    fullname = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
+    id_no = models.CharField(
+        "Passport number / ID number", max_length=20, null=True, blank=True
+    )
+    institution = models.CharField(max_length=100, null=True, blank=True)
+
+
+class StudentParticipant(models.Model):
+    participant = models.ForeignKey(Participant, on_delete=models.PROTECT)
+    student_id = models.CharField(max_length=50)
 
 
 class Refund(models.Model):
