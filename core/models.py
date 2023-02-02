@@ -73,7 +73,7 @@ class Order(models.Model):
 
 
 class Participant(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    order = models.OneToOneField(Order, on_delete=models.PROTECT)
     fullname = models.CharField(max_length=50)
     email = models.EmailField()
     phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
@@ -84,7 +84,7 @@ class Participant(models.Model):
 
 
 class StudentParticipant(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.PROTECT)
+    participant = models.OneToOneField(Participant, on_delete=models.PROTECT)
     student_id = models.CharField(max_length=50)
 
 
