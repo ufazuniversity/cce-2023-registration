@@ -58,7 +58,7 @@ class Order(models.Model):
     )
     ticket = models.ForeignKey(Ticket, on_delete=models.PROTECT)
     paid_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, null=False, editable=False
+        max_digits=8, decimal_places=2, null=True, editable=False
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
