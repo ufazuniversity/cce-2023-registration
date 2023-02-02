@@ -27,9 +27,7 @@ class Ticket(models.Model):
     no_available = models.PositiveIntegerField(
         "Number of available tickets", null=True, blank=True
     )
-    site = models.CharField(
-        max_length=20, choices=SITE_CHOICES, default="online"
-    )
+    site = models.CharField(max_length=20, choices=SITE_CHOICES, default="online")
     includes_dinner = models.BooleanField(default=False)
 
     def __str__(self):
@@ -91,8 +89,9 @@ class StudentParticipant(models.Model):
 class MealPreference(models.Model):
     order = models.OneToOneField(Order, on_delete=models.PROTECT)
     allergies = models.TextField(null=True, blank=True)
-    special_request = models.TextField(null=True, blank=True, help_text="E.g halal, kosher, vegetarian etc.")
-
+    special_request = models.TextField(
+        null=True, blank=True, help_text="E.g halal, kosher, vegetarian etc."
+    )
 
 
 class Refund(models.Model):
