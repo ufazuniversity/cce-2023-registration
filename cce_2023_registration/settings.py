@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_browser_reload",
+    "phonenumber_field",
     "ckeditor",
     "core",
     "solo",
@@ -146,3 +147,6 @@ PAYRIFF_DECLINE_URL = config("PAYRIFF_DECLINE_URL", "")
 PAYRIFF_CURRENCY = config("PAYRIFF_CURRENCY", "AZN")
 PAYRIFF_ORDER_DESCRIPTION = config("ORDER_DESCRIPTION", default="CCE'23 Registration")
 PAYRIFF_REQUEST_TIMEOUT = config("PAYRIFF_REQUEST_TIMEOUT", default=10)
+
+# Phone-number-field settings
+PHONENUMBER_DEFAULT_REGION = config("PHONENUMBER_DEFAULT_REGION", "AZ")
