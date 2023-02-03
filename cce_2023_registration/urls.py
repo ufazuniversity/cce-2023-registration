@@ -20,6 +20,7 @@ from django import urls
 
 urlpatterns = [
     urls.path("admin/", admin.site.urls),
+    urls.path("accounts/", urls.include('django.contrib.auth.urls')),
     urls.path("__reload__/", urls.include("django_browser_reload.urls")),
     urls.path("", urls.include("core.urls")),
 ] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
