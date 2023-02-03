@@ -2,14 +2,14 @@
   pk: 1
   fields:
     name: "Non-presenter participants"
-    locality: "online"
+    site: "online"
     is_paid: False
 
 - model: core.ticket
   pk: 2
   fields:
     name: "Non academic participants"
-    locality: "in-person"
+    site: "in-person"
     is_paid: True
     price: 925
     price_text: "500€ (925 AZN)"
@@ -19,7 +19,7 @@
   pk: 3
   fields:
     name: "Academic attendees (researchers, lecturers, assistant professors, associate professors, professors, …)"
-    locality: "in-person"
+    site: "in-person"
     is_paid: True
     price: 555
     price_text: "300€ (555 AZN)"
@@ -29,7 +29,7 @@
   pk: 4
   fields:
     name: "Student co-authors (Bachelor, Master or PhD students with a valid student ID at the moment of registration)"
-    locality: "in-person"
+    site: "in-person"
     is_paid: True
     price: 370
     price_text: "200€ (370 AZN)"
@@ -39,7 +39,7 @@
   pk: 5
   fields:
     name: "Student non-co-authors (with a valid student ID at the moment of registration)"
-    locality: "in-person"
+    site: "in-person"
     is_paid: True
     price: 277
     price_text: "150€ (277 AZN)"
@@ -49,7 +49,7 @@
   pk: 6
   fields:
     name: "Azerbaijan residents (social event + dinner to be purchased separately)"
-    locality: "in-person"
+    site: "in-person"
     is_paid: True
     price: 200
     variant: "student"
@@ -58,7 +58,7 @@
   pk: 7
   fields:
     name: "Academic presenters"
-    locality: online
+    site: online
     is_paid: True
     price: 185
     price_text: "100€ (185 AZN)"
@@ -68,7 +68,7 @@
   pk: 8
   fields:
     name: "Participation to social event + dinner (for accompanying spouses / partners)"
-    locality: in-person
+    site: in-person
     is_paid: True
     price: 130
     price_text: "70€ (130 AZN)"
