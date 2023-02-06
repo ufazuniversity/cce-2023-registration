@@ -86,8 +86,7 @@ class Participant(models.Model):
     institution = models.CharField(max_length=100, null=True, blank=True)
 
 
-class StudentParticipant(models.Model):
-    participant = models.OneToOneField(Participant, on_delete=models.PROTECT)
+class StudentParticipant(Participant):
     student_id = models.CharField(max_length=50)
 
 
