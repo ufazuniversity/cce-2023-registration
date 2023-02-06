@@ -10,7 +10,7 @@ class TicketAdmin(admin.ModelAdmin):
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["order_id", "ticket", "paid_amount", "status", "updated"]
+    pass
 
 
 admin.site.register(models.Refund, admin.ModelAdmin)

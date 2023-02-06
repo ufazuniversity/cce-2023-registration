@@ -56,7 +56,7 @@ class Order(models.Model):
         null=True,
         unique=True,
     )
-    ticket = models.ForeignKey(Ticket, on_delete=models.PROTECT)
+    tickets = models.ManyToManyField(Ticket, through="OrderTicket")
     paid_amount = models.DecimalField(
         max_digits=8, decimal_places=2, null=True, editable=False
     )
