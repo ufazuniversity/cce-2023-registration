@@ -70,8 +70,13 @@ class Order(models.Model):
         return self.order_id
 
 
+class OrderTicket(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    ticket = models.ForeignKey(Ticket, on_delete=models.PROTECT)
+
+
 class Participant(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.PROTECT)
+    order_ticket = models.OneToOneField(OrderTicket, on_delete=models.PROTECT)
     fullname = models.CharField(max_length=50)
     email = models.EmailField()
     phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
@@ -87,7 +92,7 @@ class StudentParticipant(models.Model):
 
 
 class MealPreference(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.PROTECT)
+    participant = models.OneToOneField(Participant, on_delete=models.PROTECT)
     allergies = models.TextField(null=True, blank=True)
     special_request = models.TextField(
         null=True, blank=True, help_text="E.g halal, kosher, vegetarian etc."
