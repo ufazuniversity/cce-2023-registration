@@ -1,14 +1,17 @@
 import logging
 
-from django import shortcuts
 from django import http
-from django.shortcuts import render
-from django.views.decorators import http as http_decorators
+from django import shortcuts
 from django.contrib.auth import decorators
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views import generic
+from django.views.decorators import http as http_decorators
 from requests import exceptions
 
-from . import payriff
+from . import forms
 from . import models
+from . import payriff
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +36,22 @@ def invoice(request):
     return shortcuts.render(request, "core/invoice.html")
 
 
+@method_decorator(decorators.login_required, name="dispatch")
+class BuyTicketView(generic.DetailView, generic.edit.FormMixin):
+    model = models.Ticket
+    form_class = forms.ParticipantForm
+
+    def get_form(self, form_class=None):
+        ticket = self.object
+        if ticket.variant == models.TICKET_VARIANT_STUDENT:
+            form_class = forms.StudentParticipantForm
+
+        return super().get_form(form_class)
+
+    def get_form_kwargs(self):
+        return {"includes_meal": self.object.includes_dinner}
+
+
 @http_decorators.require_http_methods(["GET", "POST"])
 @decorators.login_required()
 def buy_ticket(request, pk):
@@ -55,4 +74,7 @@ def buy_ticket(request, pk):
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
 
-    return render(request, "core/ticket.html", context={"ticket": ticket})
+    form = forms.ParticipantForm(initial={"order_ticket": pk})
+    ctx = {"ticket": ticket, "form": form}
+
+    return render(request, "core/ticket_detail.html", context=ctx)
