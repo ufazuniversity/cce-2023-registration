@@ -1,17 +1,24 @@
-from django.db import models
-from django.contrib.auth import models as auth_models
-from solo.models import SingletonModel
 from ckeditor import fields as ck_fields
 from django.conf import settings
+from django.contrib.auth import models as auth_models
+from django.db import models
 from phonenumber_field import modelfields as pn_fields
+from solo.models import SingletonModel
 
 
 class RegistrationSettings(SingletonModel):
     is_registration_active = models.BooleanField(default=False)
 
 
+TICKET_VARIANT_STUDENT = "student"
+TICKET_VARIANT_OTHER = "other"
+
+
 class Ticket(models.Model):
-    VARIANT_CHOICES = (("student", "Student"), ("other", "Other"))
+    VARIANT_CHOICES = (
+        (TICKET_VARIANT_STUDENT, "Student"),
+        (TICKET_VARIANT_OTHER, "Other"),
+    )
     SITE_CHOICES = (("online", "Online"), ("in-person", "In-person"))
     name = models.CharField(max_length=255)
     summary = models.CharField(max_length=255, null=True, blank=True)
