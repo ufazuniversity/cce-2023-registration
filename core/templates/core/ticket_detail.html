@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="display-1">Buy Ticket</h1>
+        <h2 class="display-2">{{ ticket.name }}</h2>
+        <form action="" method="POST" class="my-4">
+            {% csrf_token %}
+            {{ form }}
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Purchase</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
