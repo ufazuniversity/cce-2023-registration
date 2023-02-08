@@ -51,7 +51,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['includes_meal'] = self.object.includes_dinner
+        kwargs["includes_meal"] = self.object.includes_dinner
         return kwargs
 
     def form_valid(self, form):
@@ -59,7 +59,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
     def form_invalid(self, form):
         for field in form.errors:
-            form[field].field.widget.attrs['class'] += ' is-invalid'
+            form[field].field.widget.attrs["class"] += " is-invalid"
         return super().form_invalid(form)
 
     def get(self, request, *args, **kwargs):
