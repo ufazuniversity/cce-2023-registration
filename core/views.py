@@ -37,7 +37,8 @@ def invoice(request):
 
 
 @method_decorator(decorators.login_required, name="dispatch")
-class BuyTicketView(generic.DetailView, generic.edit.FormMixin):
+class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
+    template_name = "core/ticket_detail.html"
     model = models.Ticket
     form_class = forms.ParticipantForm
 
@@ -49,7 +50,27 @@ class BuyTicketView(generic.DetailView, generic.edit.FormMixin):
         return super().get_form(form_class)
 
     def get_form_kwargs(self):
-        return {"includes_meal": self.object.includes_dinner}
+        kwargs = super().get_form_kwargs()
+        kwargs['includes_meal'] = self.object.includes_dinner
+        return kwargs
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        for field in form.errors:
+            form[field].field.widget.attrs['class'] += ' is-invalid'
+        return super().form_invalid(form)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return http.HttpResponseForbidden()
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 
 @http_decorators.require_http_methods(["GET", "POST"])
