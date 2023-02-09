@@ -25,11 +25,6 @@ class ParticipantForm(forms.ModelForm):
     class Meta:
         model = models.Participant
         exclude = ["order_ticket"]
-        widgets = {
-            "phone_number": pn_widgets.PhoneNumberPrefixWidget(
-                country_choices=area_code_choices()
-            )
-        }
 
     def __init__(self, includes_meal: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
