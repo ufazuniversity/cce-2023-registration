@@ -1,4 +1,5 @@
 import logging
+import typing
 
 from django import http
 from django import shortcuts
@@ -54,12 +55,54 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         kwargs["includes_meal"] = self.object.includes_dinner
         return kwargs
 
+    def _create_meal_preference(
+            self, participant: models.Participant, form_data: dict
+    ) -> typing.Optional[models.MealPreference]:
+        allergies = form_data.pop("allergies", None)
+        special_request = form_data.pop("special_request", None)
+        if allergies or special_request:
+            return models.MealPreference(
+                participant=participant,
+                allergies=allergies,
+                special_request=special_request,
+            )
+        return None
+
+    def _create_participant(self, order_ticket: models.OrderTicket, form_data: dict) -> models.Participant:
+        ticket = self.object
+        fullname = form_data.get("fullname")
+        email = form_data.get("email")
+        phone_number = form_data.get("phone_number")
+        id_no = form_data.get("id_no")
+        institution = form_data.get("institution")
+        if ticket.variant == models.TICKET_VARIANT_STUDENT:
+            return models.StudentParticipant(order_ticket=order_ticket, **form_data)
+        return models.Participant(order_ticket=order_ticket, **form_data)
+
     def form_valid(self, form):
+        ticket = self.object
+        try:
+
+            user = self.request.user
+            price = float(ticket.price)
+            # Create pending order and redirect to the acquired paymentUrl
+            order_id, session_id, payment_url = payriff.create_order(price)
+            order = models.Order.objects.create(
+                user=user, order_id=order_id, session_id=session_id
+            )
+            ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
+            participant = self._create_participant()
+            meal_pref = self._create_meal_preference()
+            return shortcuts.redirect(payment_url)
+        except (exceptions.Timeout, exceptions.HTTPError) as e:
+            logger.error(e)
+
         return super().form_valid(form)
 
     def form_invalid(self, form):
         for field in form.errors:
             form[field].field.widget.attrs["class"] += " is-invalid"
+
         return super().form_invalid(form)
 
     def get(self, request, *args, **kwargs):
