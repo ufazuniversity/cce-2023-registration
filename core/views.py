@@ -4,10 +4,8 @@ import typing
 from django import http
 from django import shortcuts
 from django.contrib.auth import decorators
-from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.decorators import http as http_decorators
 from requests import exceptions
 
 from . import forms
@@ -56,7 +54,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
+        self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -68,7 +66,9 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             )
         return None
 
-    def _create_participant(self, order_ticket: models.OrderTicket, form_data: dict) -> models.Participant:
+    def _create_participant(
+        self, order_ticket: models.OrderTicket, form_data: dict
+    ) -> models.Participant:
         ticket = self.object
         fullname = form_data.get("fullname")
         email = form_data.get("email")
@@ -114,31 +114,3 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             return http.HttpResponseForbidden()
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
-
-
-@http_decorators.require_http_methods(["GET", "POST"])
-@decorators.login_required()
-def buy_ticket(request, pk):
-    user = request.user
-
-    try:
-        # Return 404 if ticket is not found
-        ticket = models.Ticket.objects.get(pk=pk)
-    except models.Ticket.DoesNotExist:
-        return http.HttpResponseNotFound(f"Did not find a ticket with the ID, {pk}")
-
-    if request.method == "POST":
-        try:
-            # Create pending order and redirect to the acquired paymentUrl
-            order_id, session_id, payment_url = payriff.create_order(ticket.price)
-            models.Order.objects.create(
-                user=user, order_id=order_id, session_id=session_id, ticket=ticket
-            )
-            return shortcuts.redirect(payment_url)
-        except (exceptions.Timeout, exceptions.HTTPError) as e:
-            logger.error(e)
-
-    form = forms.ParticipantForm(initial={"order_ticket": pk})
-    ctx = {"ticket": ticket, "form": form}
-
-    return render(request, "core/ticket_detail.html", context=ctx)
