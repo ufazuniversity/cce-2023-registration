@@ -32,7 +32,6 @@ def order_payload(
         "merchant": merchant_id,
     }
 
-    print(ret)
     return json.dumps(ret)
 
 
