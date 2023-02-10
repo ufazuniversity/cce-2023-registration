@@ -36,6 +36,5 @@ class ParticipantForm(forms.ModelForm):
 
 
 class StudentParticipantForm(ParticipantForm):
-    class Meta:
+    class Meta(ParticipantForm.Meta):
         model = models.StudentParticipant
-        fields = "__all__"
