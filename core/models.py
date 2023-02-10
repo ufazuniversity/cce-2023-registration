@@ -68,7 +68,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
-        choices=STATUS_CHOICES, max_length=12, null=False, default="pending"
+        choices=STATUS_CHOICES, max_length=12, null=False, default="PENDING"
     )
 
     def __str__(self):
