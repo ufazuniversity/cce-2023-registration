@@ -54,8 +54,8 @@ class Order(models.Model):
         ("REFUNDED", "Refunded"),
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
-    order_id = models.IntegerField(
-        verbose_name="Payriff order ID", null=False, unique=True
+    order_id = models.CharField(
+        verbose_name="Payriff order ID", max_length=10, unique=True
     )
     session_id = models.CharField(
         verbose_name="Payriff session ID",
