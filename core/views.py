@@ -1,3 +1,4 @@
+import functools
 import logging
 import typing
 
@@ -7,6 +8,7 @@ from django import urls
 from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
+from django.views.decorators import csrf
 from requests import exceptions
 
 from . import forms
@@ -55,7 +57,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-        self, participant: models.Participant, form_data: dict
+            self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -68,7 +70,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-        self, order_ticket: models.OrderTicket, form_data: dict
+            self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 
@@ -92,16 +94,10 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
     def _cancel_url(self):
         url = self.request.build_absolute_uri(urls.reverse("order-cancelled"))
-        print(url)
         return url
 
     def _create_payriff_order(self, price):
-        return payriff.create_order(
-            price,
-            approve_url=self._approve_url(),
-            decline_url=self._decline_url(),
-            cancel_url=self._cancel_url(),
-        )
+        return payriff.create_order(price)
 
     def form_valid(self, form):
         ticket = self.object
@@ -141,13 +137,43 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return super().post(request, *args, **kwargs)
 
 
+def referer_only(function):
+    @functools.wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.headers.get("referer") is not None:
+            return function(request, *args, **kwargs)
+        else:
+            return http.HttpResponseNotFound()
+
+    return wrap
+
+
+def update_order_status(json_payload: str):
+    order_id, session_id, status = payriff.get_order_result_details(json_payload)
+    models.Order.objects.filter(order_id=order_id, session_id=session_id).update(
+        status=status
+    )
+
+
+@referer_only
+@csrf.csrf_exempt
 def order_approved(request):
+    if request.method == "POST":
+        update_order_status(request.body)
     return shortcuts.render(request, "core/order_success.html")
 
 
+@referer_only
+@csrf.csrf_exempt
 def order_declined(request):
+    if request.method == "POST":
+        update_order_status(request.body)
     return shortcuts.render(request, "core/order_declined.html")
 
 
-def order_cancelled(request):
+@referer_only
+@csrf.csrf_exempt
+def order_canceled(request):
+    if request.method == "POST":
+        update_order_status(request.body)
     return shortcuts.render(request, "core/order_cancelled.html")
