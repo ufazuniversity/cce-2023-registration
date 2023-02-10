@@ -48,8 +48,8 @@ class Ticket(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = (
         ("PENDING", "Pending"),
-        ("APPROVED", "Complete"),
-        ("CANCELED", "Cancelled"),
+        ("APPROVED", "Approved"),
+        ("CANCELED", "Canceled"),
         ("DECLINED", "Declined"),
         ("REFUNDED", "Refunded"),
     )
