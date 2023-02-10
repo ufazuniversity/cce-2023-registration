@@ -9,9 +9,27 @@ class TicketAdmin(admin.ModelAdmin):
     list_display = ["name", "is_paid", "price", "is_active", "variant"]
 
 
+class OrderTicketInlineAdmin(admin.TabularInline):
+    model = models.Order.tickets.through
+    fields = ["ticket"]
+
+    can_delete = False
+
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["user", "order_id", "session_id", "paid_amount", "updated", "status"]
+    list_display = [
+        "user",
+        "order_id",
+        "session_id",
+        "paid_amount",
+        "updated",
+        "status",
+    ]
+    inlines = [OrderTicketInlineAdmin]
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(models.Refund, admin.ModelAdmin)
