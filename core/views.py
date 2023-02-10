@@ -3,6 +3,7 @@ import typing
 
 from django import http
 from django import shortcuts
+from django import urls
 from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -54,7 +55,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
+        self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -67,17 +68,40 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-            self, order_ticket: models.OrderTicket, form_data: dict
+        self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
-        fullname = form_data.get("fullname")
-        email = form_data.get("email")
-        phone_number = form_data.get("phone_number")
-        id_no = form_data.get("id_no")
-        institution = form_data.get("institution")
+
         if ticket.variant == models.TICKET_VARIANT_STUDENT:
+            # return models.StudentParticipant(
+            #     order_ticket=order_ticket,
+            #     fullname=form_data["fullname"],
+            #     email=form_data["email"],
+            #     phone_number=form_data["phone_number"],
+            #     id_no=form_data["id_no"],
+            #     institution=form_data.get("institution"),
+            # )
             return models.StudentParticipant(order_ticket=order_ticket, **form_data)
         return models.Participant(order_ticket=order_ticket, **form_data)
+
+    def _approve_url(self):
+        return self.request.build_absolute_uri(urls.reverse("order-approved"))
+
+    def _decline_url(self):
+        return self.request.build_absolute_uri(urls.reverse("order-declined"))
+
+    def _cancel_url(self):
+        url = self.request.build_absolute_uri(urls.reverse("order-cancelled"))
+        print(url)
+        return url
+
+    def _create_payriff_order(self, price):
+        return payriff.create_order(
+            price,
+            approve_url=self._approve_url(),
+            decline_url=self._decline_url(),
+            cancel_url=self._cancel_url(),
+        )
 
     def form_valid(self, form):
         ticket = self.object
@@ -86,13 +110,14 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             user = self.request.user
             price = float(ticket.price)
             # Create pending order and redirect to the acquired paymentUrl
-            order_id, session_id, payment_url = payriff.create_order(price)
+            order_id, session_id, payment_url = self._create_payriff_order(price)
             order = models.Order.objects.create(
                 user=user, order_id=order_id, session_id=session_id
             )
+            data = form.cleaned_data
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
-            participant = self._create_participant()
-            meal_pref = self._create_meal_preference()
+            participant = self._create_participant(ot, data)
+            self._create_meal_preference(participant, data)
             return shortcuts.redirect(payment_url)
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
