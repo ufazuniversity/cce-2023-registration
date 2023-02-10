@@ -50,6 +50,7 @@ class Order(models.Model):
         ("PENDING", "Pending"),
         ("APPROVED", "Complete"),
         ("CANCELED", "Cancelled"),
+        ("DECLINED", "Declined"),
         ("REFUNDED", "Refunded"),
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
