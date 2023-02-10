@@ -47,10 +47,10 @@ class Ticket(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = (
-        ("pending", "Pending"),
-        ("complete", "Complete"),
-        ("cancelled", "Cancelled"),
-        ("refunded", "Refunded"),
+        ("PENDING", "Pending"),
+        ("APPROVED", "Complete"),
+        ("CANCELED", "Cancelled"),
+        ("REFUNDED", "Refunded"),
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
     order_id = models.IntegerField(
