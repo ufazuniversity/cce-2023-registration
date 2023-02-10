@@ -54,19 +54,16 @@ class Order(models.Model):
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
     order_id = models.IntegerField(
-        verbose_name="Payriff order ID", null=False, editable=False, unique=True
+        verbose_name="Payriff order ID", null=False, unique=True
     )
     session_id = models.CharField(
         verbose_name="Payriff session ID",
         max_length=50,
-        editable=False,
         null=True,
         unique=True,
     )
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
-    paid_amount = models.DecimalField(
-        max_digits=8, decimal_places=2, null=True, editable=False
-    )
+    paid_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
@@ -74,7 +71,7 @@ class Order(models.Model):
     )
 
     def __str__(self):
-        return self.order_id
+        return str(self.order_id)
 
 
 class OrderTicket(models.Model):
