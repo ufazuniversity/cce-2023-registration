@@ -1,8 +1,7 @@
+import json
 import typing
 
 import requests
-import json
-import logging
 from django.conf import settings
 
 
@@ -15,9 +14,9 @@ def order_payload(
     currency: str,
     description: str,
     merchant_id: str,
-    approveURL: str,
-    cancelURL: str,
-    declineURL: str,
+    approve_url: str,
+    cancel_url: str,
+    decline_url: str,
     language: str,
 ) -> str:
     ret = {
@@ -26,12 +25,14 @@ def order_payload(
             "currencyType": currency,
             "description": description,
             "language": language,
-            "approveURL": approveURL,
-            "cancelURL": cancelURL,
-            "declineURL": declineURL,
+            "approveURL": approve_url,
+            "cancelURL": cancel_url,
+            "declineURL": decline_url,
         },
         "merchant": merchant_id,
     }
+
+    print(ret)
     return json.dumps(ret)
 
 
@@ -42,9 +43,9 @@ def create_order(
     secret: str = settings.PAYRIFF_SECRET,
     merchant_id: str = settings.PAYRIFF_MERCHANT_ID,
     timeout: int = settings.PAYRIFF_REQUEST_TIMEOUT,
-    approveURL: str = settings.PAYRIFF_APPROVE_URL,
-    cancelURL: str = settings.PAYRIFF_CANCEL_URL,
-    declineURL: str = settings.PAYRIFF_DECLINE_URL,
+    approve_url: str = settings.PAYRIFF_APPROVE_URL,
+    cancel_url: str = settings.PAYRIFF_CANCEL_URL,
+    decline_url: str = settings.PAYRIFF_DECLINE_URL,
     language: str = settings.PAYRIFF_LANGUAGE,
 ) -> typing.Tuple[str, str, str]:
     payload = order_payload(
@@ -52,9 +53,9 @@ def create_order(
         currency=currency,
         description=description,
         merchant_id=merchant_id,
-        approveURL=approveURL,
-        cancelURL=cancelURL,
-        declineURL=declineURL,
+        approve_url=approve_url,
+        cancel_url=cancel_url,
+        decline_url=decline_url,
         language=language,
     )
     r = requests.post(
