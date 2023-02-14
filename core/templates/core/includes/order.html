@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="card mx-auto my-2 border-info">
+    <div class="card-header">
+        Order ID: <strong>{{ order.order_id }}</strong> |
+        Amount paid: <strong>{{ order.paid_amount }}</strong>
+    </div>
+    <div class="card-body">
+        <h2 class="lead mb-3">Tickets bought</h2>
+        {% for ticket in order.tickets.all %}
+            {% include 'core/includes/ticket.html' with ticket=ticket %}
+        {% endfor %}
+    </div>
+</div>
