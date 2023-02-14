@@ -57,7 +57,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
+        self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -70,7 +70,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-            self, order_ticket: models.OrderTicket, form_data: dict
+        self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 
@@ -140,10 +140,10 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 def referer_only(function):
     @functools.wraps(function)
     def wrap(request, *args, **kwargs):
-        if request.headers.get("referer") is not None:
-            return function(request, *args, **kwargs)
-        else:
+        if request.method == "GET" and request.headers.get("referer") is None:
             return http.HttpResponseNotFound()
+        else:
+            return function(request, *args, **kwargs)
 
     return wrap
 
