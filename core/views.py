@@ -30,8 +30,12 @@ def index(request):
     return shortcuts.render(request, "core/index.html", context=ctx)
 
 
+@decorators.login_required
 def account(request):
-    return shortcuts.render(request, "core/account.html")
+    user = request.user
+    orders = user.order_set.all()
+    ctx = {"orders": orders}
+    return shortcuts.render(request, "core/account.html", ctx)
 
 
 def invoice(request):
@@ -57,7 +61,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
+        self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -70,7 +74,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-            self, order_ticket: models.OrderTicket, form_data: dict
+        self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 
@@ -100,7 +104,10 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             # Create pending order and redirect to the acquired paymentUrl
             order_id, session_id, payment_url = self._create_payriff_order(price)
             order = models.Order.objects.create(
-                user=user, order_id=order_id, session_id=session_id
+                user=user,
+                order_id=order_id,
+                session_id=session_id,
+                paid_amount=ticket.price,
             )
             data = form.cleaned_data
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
