@@ -13,6 +13,12 @@ class RegistrationSettings(SingletonModel):
 TICKET_VARIANT_STUDENT = "student"
 TICKET_VARIANT_OTHER = "other"
 
+ORDER_STATUS_APPROVED = "APPROVED"
+ORDER_STATUS_DECLINED = "DECLINED"
+ORDER_STATUS_CANCELED = "CANCELED"
+ORDER_STATUS_REFUNDED = "REFUNDED"
+ORDER_STATUS_PENDING = "PENDING"
+
 
 class Ticket(models.Model):
     VARIANT_CHOICES = (
@@ -47,11 +53,11 @@ class Ticket(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = (
-        ("PENDING", "Pending"),
-        ("APPROVED", "Approved"),
-        ("CANCELED", "Canceled"),
-        ("DECLINED", "Declined"),
-        ("REFUNDED", "Refunded"),
+        (ORDER_STATUS_PENDING, "Pending"),
+        (ORDER_STATUS_APPROVED, "Approved"),
+        (ORDER_STATUS_CANCELED, "Canceled"),
+        (ORDER_STATUS_DECLINED, "Declined"),
+        (ORDER_STATUS_REFUNDED, "Refunded"),
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
     order_id = models.CharField(
