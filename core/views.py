@@ -75,14 +75,6 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         ticket = self.object
 
         if ticket.variant == models.TICKET_VARIANT_STUDENT:
-            # return models.StudentParticipant(
-            #     order_ticket=order_ticket,
-            #     fullname=form_data["fullname"],
-            #     email=form_data["email"],
-            #     phone_number=form_data["phone_number"],
-            #     id_no=form_data["id_no"],
-            #     institution=form_data.get("institution"),
-            # )
             return models.StudentParticipant(order_ticket=order_ticket, **form_data)
         return models.Participant(order_ticket=order_ticket, **form_data)
 
@@ -162,7 +154,7 @@ def update_order_status(json_payload: str):
 def order_approved(request):
     if request.method == "POST":
         update_order_status(request.body)
-    return shortcuts.render(request, "core/order_success.html")
+    return shortcuts.render(request, "core/order_approved.html")
 
 
 @referer_only
