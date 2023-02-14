@@ -80,6 +80,9 @@ class Order(models.Model):
     def __str__(self):
         return str(self.order_id)
 
+    class Meta:
+        unique_together = ("order_id", "session_id")
+
 
 class OrderTicket(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
