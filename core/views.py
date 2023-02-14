@@ -57,7 +57,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-        self, participant: models.Participant, form_data: dict
+            self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -70,7 +70,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-        self, order_ticket: models.OrderTicket, form_data: dict
+            self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 
@@ -150,9 +150,11 @@ def referer_only(function):
 
 def update_order_status(json_payload: str):
     order_id, session_id, status = payriff.get_order_result_details(json_payload)
-    models.Order.objects.filter(order_id=order_id, session_id=session_id).update(
-        status=status
-    )
+    order = models.Order.objects.filter(order_id=order_id, session_id=session_id)
+    if status == models.ORDER_STATUS_CANCELED:
+        order.delete()
+    else:
+        order.update(status=status)
 
 
 @referer_only
