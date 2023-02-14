@@ -59,7 +59,7 @@ class Order(models.Model):
         (ORDER_STATUS_DECLINED, "Declined"),
         (ORDER_STATUS_REFUNDED, "Refunded"),
     )
-    user = models.ForeignKey(auth_models.User, on_delete=models.PROTECT)
+    user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
     order_id = models.CharField(
         verbose_name="Payriff order ID", max_length=10, unique=True
     )
@@ -82,12 +82,12 @@ class Order(models.Model):
 
 
 class OrderTicket(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.PROTECT)
-    ticket = models.ForeignKey(Ticket, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
 
 
 class Participant(models.Model):
-    order_ticket = models.OneToOneField(OrderTicket, on_delete=models.PROTECT)
+    order_ticket = models.OneToOneField(OrderTicket, on_delete=models.CASCADE)
     fullname = models.CharField(max_length=50)
     email = models.EmailField()
     phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
