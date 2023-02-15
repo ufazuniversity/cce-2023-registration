@@ -1,5 +1,6 @@
 import functools
 
+from allauth.account import forms as allauth_forms
 from django import forms
 from django import utils
 from django.conf import settings
@@ -38,3 +39,31 @@ class ParticipantForm(forms.ModelForm):
 class StudentParticipantForm(ParticipantForm):
     class Meta(ParticipantForm.Meta):
         model = models.StudentParticipant
+
+
+# Allauth form modifications
+class BootstrapFormControlMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in self.fields.values():
+            f.widget.attrs.update({"class": "form-control"})
+
+
+class SignupForm(BootstrapFormControlMixin, allauth_forms.SignupForm):
+    pass
+
+
+class LoginForm(BootstrapFormControlMixin, allauth_forms.LoginForm):
+    pass
+
+
+class ResetPasswordForm(BootstrapFormControlMixin, allauth_forms.ResetPasswordForm):
+    pass
+
+
+class SetPasswordForm(BootstrapFormControlMixin, allauth_forms.SetPasswordForm):
+    pass
+
+
+class ChangePasswordForm(BootstrapFormControlMixin, allauth_forms.ChangePasswordForm):
+    pass
