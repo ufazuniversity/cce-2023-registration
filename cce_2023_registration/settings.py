@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "phonenumber_field",
     "ckeditor",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "core",
     "solo",
 ]
@@ -158,3 +161,20 @@ PHONENUMBER_DEFAULT_REGION = config("PHONENUMBER_DEFAULT_REGION", "AZ")
 
 # Custom form renderer
 FORM_RENDERER = "core.renderers.BootstrapFormRenderer"
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+LOGIN_REDIRECT_URL = "index"
+
+SITE_ID = 1
+
+# Django allauth configs
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SESSION_REMEMBER = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
