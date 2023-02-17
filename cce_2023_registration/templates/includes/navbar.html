@@ -3,7 +3,7 @@
         <a href="{% url 'index' %}" class="navbar-brand">CCE'23 Registration</a>
         <div class="d-flex">
             {% if not user.is_authenticated %}
-                <a href="#">Login</a>&nbsp; / &nbsp; <a href="#">Signup</a>
+                <a href="{% url 'account_login' %}">Login</a>
             {% else %}
                 <a href="/account">Account</a>
             {% endif %}
