@@ -50,7 +50,12 @@ class BootstrapFormControlMixin:
 
 
 class SignupForm(BootstrapFormControlMixin, allauth_forms.SignupForm):
-    pass
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={"placeholder": "First name"})
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={"placeholder": "Last name"})
+    )
 
 
 class LoginForm(BootstrapFormControlMixin, allauth_forms.LoginForm):
