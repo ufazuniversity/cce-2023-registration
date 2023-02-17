@@ -4,15 +4,16 @@
     <div class="container my-2">
 
         <div class="card">
-            <div class="card-header"><h2 class="lead my-0">Login</h2></div>
+            <div class="card-header"><h2 class="lead my-0">login</h2></div>
             <div class="card-body">
-                <form action="{% url 'account_login' %}" class="login" method="POST">
+                <p>if you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.</p>
+                <form action="{% url 'account_login' %}" class="login" method="post">
                     {% csrf_token %}
                     {{ form }}
                     {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                     {% endif %}
-                    <p><a href="{% url 'account_reset_password' %}" class="button secondaryAction">Forgot Password?</a>
+                    <p><a href="{% url 'account_reset_password' %}" class="button secondaryaction">Forgot password?</a>
                     </p>
                     <div class="d-grid">
                         <button class="btn btn-primary" type="submit">Sign in</button>
