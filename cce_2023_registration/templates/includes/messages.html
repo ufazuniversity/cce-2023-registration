@@ -1,7 +1,15 @@
 {% if messages %}
-    <ul class="messages">
+    <div class="messages container">
         {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% with level=message.level levels=DEFAULT_MESSAGE_LEVELS %}
+                <div class="alert
+                    alert-{% if level == levels.DEBUG %}secondary
+                          {% elif level == levels.SUCCESS %}success
+                          {% elif level == levels.ERROR %}danger
+                          {% elif level == levels.WARNING %}warning
+                          {% elif level == levels.INFO %}primary
+                          {% endif %}" role="alert">{{ message }}</div>
+            {% endwith %}
         {% endfor %}
-    </ul>
+    </div>
 {% endif %}
