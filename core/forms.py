@@ -72,3 +72,7 @@ class SetPasswordForm(BootstrapFormControlMixin, allauth_forms.SetPasswordForm):
 
 class ChangePasswordForm(BootstrapFormControlMixin, allauth_forms.ChangePasswordForm):
     pass
+
+
+class AddEmailForm(BootstrapFormControlMixin, allauth_forms.AddEmailForm):
+    pass
