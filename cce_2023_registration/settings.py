@@ -185,6 +185,7 @@ ACCOUNT_FORMS = {
     "signup": "core.forms.SignupForm",
     "login": "core.forms.LoginForm",
     "reset_password": "core.forms.ResetPasswordForm",
+    "reset_password_from_key": "core.forms.ResetPasswordKeyFrom",
     "set_password": "core.forms.SetPasswordForm",
     "change_password": "core.forms.ChangePasswordForm",
     "add_email": "core.forms.AddEmailForm",

@@ -66,6 +66,10 @@ class ResetPasswordForm(BootstrapFormControlMixin, allauth_forms.ResetPasswordFo
     pass
 
 
+class ResetPasswordKeyFrom(BootstrapFormControlMixin, allauth_forms.ResetPasswordKeyForm):
+    pass
+
+
 class SetPasswordForm(BootstrapFormControlMixin, allauth_forms.SetPasswordForm):
     pass
 
