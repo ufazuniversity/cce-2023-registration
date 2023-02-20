@@ -180,6 +180,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_MAX_EMAIL_ADDRESSES = 1
 ACCOUNT_FORMS = {
     "signup": "core.forms.SignupForm",
     "login": "core.forms.LoginForm",
