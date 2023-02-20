@@ -1,9 +1,9 @@
 {% extends 'account/base.html' %}
 {% load account %}
 
-{% block card_header_inner %}
-    Confirm E-mail Address
-{% endblock %}
+{% block head_title %}Confirm E-mail Address{% endblock %}
+{% block card_header_inner %}Confirm E-mail Address{% endblock %}
+
 {% block card_body_inner %}
     {% if confirmation %}
         {% user_display confirmation.email_address.user as user_display %}
