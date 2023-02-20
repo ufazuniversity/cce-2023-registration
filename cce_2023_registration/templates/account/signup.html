@@ -1,20 +1,17 @@
 {% extends 'account/base.html' %}
 
-{% block content_inner %}
-    <div class="card">
-        <div class="card-header"><h2 class="lead my-0">Signup</h2></div>
-        <div class="card-body">
-            <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
-            <form action="{% url 'account_signup' %}" class="signup" method="post">
-                {% csrf_token %}
-                {{ form }}
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                {% endif %}
-                <div class="d-grid">
-                    <button class="btn btn-primary" type="submit">Sign up</button>
-                </div>
-            </form>
+{% block card_header_inner %}Signup{% endblock %}
+{% block card_body_inner %}
+    <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+    <form action="{% url 'account_signup' %}" class="signup" method="post">
+        {% csrf_token %}
+        {{ form }}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <div class="d-grid">
+            <button class="btn btn-primary" type="submit">Sign up</button>
         </div>
-    </div>
+    </form>
 {% endblock %}
+{% block card_footer %}{% endblock %}
