@@ -9,6 +9,19 @@ from phonenumber_field import widgets as pn_widgets
 from . import models
 
 
+class BootstrapFormControlMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for f in self.fields.values():
+            f.widget.attrs.update({"class": "form-control"})
+
+
+class FreeParticipantForm(BootstrapFormControlMixin, forms.ModelForm):
+    class Meta:
+        model = models.Participant
+        fields = ['fullname', 'email']
+
+
 @functools.cache
 def area_code_choices():
     language = utils.translation.get_language() or settings.LANGUAGE_CODE
@@ -42,11 +55,6 @@ class StudentParticipantForm(ParticipantForm):
 
 
 # Allauth form modifications
-class BootstrapFormControlMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for f in self.fields.values():
-            f.widget.attrs.update({"class": "form-control"})
 
 
 class SignupForm(BootstrapFormControlMixin, allauth_forms.SignupForm):

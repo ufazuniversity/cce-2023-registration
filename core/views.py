@@ -5,6 +5,7 @@ import typing
 from django import http
 from django import shortcuts
 from django import urls
+from django.contrib import messages
 from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -43,8 +44,37 @@ def invoice(request):
 
 
 @method_decorator(decorators.login_required, name="dispatch")
+class RegisterFreeView(generic.FormView, generic.detail.SingleObjectMixin):
+    template_name = "core/free_register.html"
+    model = models.Ticket
+    form_class = forms.FreeParticipantForm
+    success_url = "/"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        order = models.Order.objects.create(
+            user=self.request.user, status=models.ORDER_STATUS_APPROVED
+        )
+        order_ticket = models.OrderTicket.objects.create(
+            order=order, ticket=self.object
+        )
+        participant = models.Participant.objects.create(
+            order_ticket=order_ticket, **form.cleaned_data
+        )
+        messages.success(self.request, "You have successfully registered")
+        return super().form_valid(form)
+
+
+@method_decorator(decorators.login_required, name="dispatch")
 class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
-    template_name = "core/ticket_detail.html"
+    template_name = "core/buy_ticket.html"
     model = models.Ticket
     form_class = forms.ParticipantForm
 
@@ -57,7 +87,8 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["includes_meal"] = self.object.includes_dinner
+        if self.object.is_paid:
+            kwargs["includes_meal"] = self.object.includes_dinner
         return kwargs
 
     def _create_meal_preference(
