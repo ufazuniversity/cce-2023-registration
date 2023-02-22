@@ -61,24 +61,25 @@ class Order(models.Model):
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
     order_id = models.CharField(
-        verbose_name="Payriff order ID", max_length=10, unique=True
+        verbose_name="Payriff order ID", max_length=10, unique=True, null=True, blank=True
     )
     session_id = models.CharField(
         verbose_name="Payriff session ID",
         max_length=50,
         null=True,
+        blank=True,
         unique=True,
     )
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
-    paid_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True)
+    paid_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
-        choices=STATUS_CHOICES, max_length=12, null=False, default="PENDING"
+        choices=STATUS_CHOICES, max_length=12, null=True, blank=True, default="PENDING"
     )
 
     def __str__(self):
-        return str(self.order_id)
+        return str(self.id)
 
     class Meta:
         unique_together = ("order_id", "session_id")
