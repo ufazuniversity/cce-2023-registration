@@ -54,9 +54,6 @@ def user_has_free_registration(user):
 @decorators.user_passes_test(user_has_free_registration)
 def free_registration(request):
     models.FreeRegistration.objects.create(user=request.user)
-    # messages.success(request,
-    #                  "You have successfully registered for the free online event. We will send you further email about the details of the event."
-    #                  )
     return shortcuts.redirect(urls.reverse('account'))
 
 
