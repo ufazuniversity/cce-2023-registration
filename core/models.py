@@ -51,6 +51,11 @@ class Ticket(models.Model):
         return self.price_text or f"{self.price} {settings.PAYRIFF_CURRENCY}"
 
 
+class FreeRegistration(models.Model):
+    user = models.OneToOneField(auth_models.User, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now_add=True)
+
+
 class Order(models.Model):
     STATUS_CHOICES = (
         (ORDER_STATUS_PENDING, "Pending"),

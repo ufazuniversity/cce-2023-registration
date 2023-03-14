@@ -10,6 +10,7 @@ from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators import csrf
+from django.views.decorators import http as http_decorators
 from requests import exceptions
 
 from . import forms
@@ -27,6 +28,7 @@ def index(request):
         "tickets": tickets,
         "free_tickets": free_tickets,
         "paid_tickets": paid_tickets,
+        "user": request.user
     }
     return shortcuts.render(request, "core/index.html", context=ctx)
 
@@ -41,6 +43,21 @@ def account(request):
 
 def invoice(request):
     return shortcuts.render(request, "core/invoice.html")
+
+
+def user_has_free_registration(user):
+    return not models.FreeRegistration.objects.filter(user=user).exists()
+
+
+@http_decorators.require_POST
+@decorators.login_required
+@decorators.user_passes_test(user_has_free_registration)
+def free_registration(request):
+    models.FreeRegistration.objects.create(user=request.user)
+    # messages.success(request,
+    #                  "You have successfully registered for the free online event. We will send you further email about the details of the event."
+    #                  )
+    return shortcuts.redirect(urls.reverse('account'))
 
 
 @method_decorator(decorators.login_required, name="dispatch")
@@ -92,7 +109,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-        self, participant: models.Participant, form_data: dict
+            self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -105,7 +122,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-        self, order_ticket: models.OrderTicket, form_data: dict
+            self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 

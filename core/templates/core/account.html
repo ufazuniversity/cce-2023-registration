@@ -2,8 +2,14 @@
 
 {% block content %}
     <div class="container">
-        {% for order in orders %}
-            {% include 'core/includes/order.html' with order=order %}
-        {% endfor %}
+        <div class="my-5">
+            <div class="alert alert-primary" role="alert">You are registered for free online attendance.</div>
+        </div>
+        {% if orders %}
+            <h2 class="my-4">Your ticket orders</h2>
+            {% for order in orders %}
+                {% include 'core/includes/order.html' with order=order %}
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

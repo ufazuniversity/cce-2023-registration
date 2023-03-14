@@ -9,6 +9,11 @@ class TicketAdmin(admin.ModelAdmin):
     list_display = ["name", "is_paid", "price", "is_active", "variant"]
 
 
+@admin.register(models.FreeRegistration)
+class FreeRegistrationAdmin(admin.ModelAdmin):
+    list_display = ["user", "datetime"]
+
+
 class OrderTicketInlineAdmin(admin.TabularInline):
     model = models.Order.tickets.through
     fields = ["ticket"]
