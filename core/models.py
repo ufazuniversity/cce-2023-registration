@@ -103,7 +103,7 @@ class Participant(models.Model):
     id_no = models.CharField(
         "Passport number / ID number", max_length=20, null=True, blank=True
     )
-    institution = models.CharField(max_length=100, null=True, blank=True)
+    institution = models.CharField("Institution name", max_length=100, null=True, blank=True)
 
 
 class StudentParticipant(Participant):
