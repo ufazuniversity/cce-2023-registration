@@ -5,7 +5,6 @@ import typing
 from django import http
 from django import shortcuts
 from django import urls
-from django.contrib import messages
 from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -28,7 +27,7 @@ def index(request):
         "tickets": tickets,
         "free_tickets": free_tickets,
         "paid_tickets": paid_tickets,
-        "user": request.user
+        "user": request.user,
     }
     return shortcuts.render(request, "core/index.html", context=ctx)
 
@@ -54,36 +53,7 @@ def user_has_free_registration(user):
 @decorators.user_passes_test(user_has_free_registration)
 def free_registration(request):
     models.FreeRegistration.objects.create(user=request.user)
-    return shortcuts.redirect(urls.reverse('account'))
-
-
-@method_decorator(decorators.login_required, name="dispatch")
-class RegisterFreeView(generic.FormView, generic.detail.SingleObjectMixin):
-    template_name = "core/free_register.html"
-    model = models.Ticket
-    form_class = forms.FreeParticipantForm
-    success_url = "/"
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        order = models.Order.objects.create(
-            user=self.request.user, status=models.ORDER_STATUS_APPROVED
-        )
-        order_ticket = models.OrderTicket.objects.create(
-            order=order, ticket=self.object
-        )
-        participant = models.Participant.objects.create(
-            order_ticket=order_ticket, **form.cleaned_data
-        )
-        messages.success(self.request, "You have successfully registered")
-        return super().form_valid(form)
+    return shortcuts.redirect(urls.reverse("account"))
 
 
 @method_decorator(decorators.login_required, name="dispatch")
@@ -106,7 +76,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
+        self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -119,7 +89,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-            self, order_ticket: models.OrderTicket, form_data: dict
+        self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 

@@ -16,12 +16,6 @@ class BootstrapFormControlMixin:
             f.widget.attrs.update({"class": "form-control"})
 
 
-class FreeParticipantForm(BootstrapFormControlMixin, forms.ModelForm):
-    class Meta:
-        model = models.Participant
-        fields = ['fullname', 'email']
-
-
 @functools.cache
 def area_code_choices():
     language = utils.translation.get_language() or settings.LANGUAGE_CODE
