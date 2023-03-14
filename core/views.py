@@ -76,7 +76,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return kwargs
 
     def _create_meal_preference(
-        self, participant: models.Participant, form_data: dict
+            self, participant: models.Participant, form_data: dict
     ) -> typing.Optional[models.MealPreference]:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
@@ -89,13 +89,26 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return None
 
     def _create_participant(
-        self, order_ticket: models.OrderTicket, form_data: dict
+            self, order_ticket: models.OrderTicket, form_data: dict
     ) -> models.Participant:
         ticket = self.object
 
         if ticket.variant == models.TICKET_VARIANT_STUDENT:
             return models.StudentParticipant(order_ticket=order_ticket, **form_data)
-        return models.Participant(order_ticket=order_ticket, **form_data)
+        fullname = form_data["fullname"]
+        email = form_data["email"]
+        phone_number = form_data["phone_number"]
+        id_no = form_data["id_no"]
+        institution = form_data["institution"]
+
+        return models.Participant(
+            order_ticket=order_ticket,
+            fullname=fullname,
+            email=email,
+            phone_number=phone_number,
+            id_no=id_no,
+            institution=institution,
+        )
 
     def _approve_url(self):
         return self.request.build_absolute_uri(urls.reverse("order-approved"))
@@ -104,7 +117,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return self.request.build_absolute_uri(urls.reverse("order-declined"))
 
     def _cancel_url(self):
-        url = self.request.build_absolute_uri(urls.reverse("order-cancelled"))
+        url = self.request.build_absolute_uri(urls.reverse("order-canceled"))
         return url
 
     def _create_payriff_order(self, price):
@@ -192,4 +205,4 @@ def order_declined(request):
 def order_canceled(request):
     if request.method == "POST":
         update_order_status(request.body)
-    return shortcuts.render(request, "core/order_cancelled.html")
+    return shortcuts.render(request, "core/order_canceled.html")

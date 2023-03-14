@@ -145,7 +145,7 @@ PAYRIFF_APPROVE_URL = config(
     "PAYRIFF_APPROVE_URL", "http://localhost:8000/order-approved"
 )
 PAYRIFF_CANCEL_URL = config(
-    "PAYRIFF_CANCEL_URL", "http://localhost:8000/order-cancelled"
+    "PAYRIFF_CANCEL_URL", "http://localhost:8000/order-canceled"
 )
 PAYRIFF_DECLINE_URL = config(
     "PAYRIFF_DECLINE_URL", "http://localhost:8000/order-declined"

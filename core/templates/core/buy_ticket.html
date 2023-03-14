@@ -2,15 +2,24 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="display-1">Buy Ticket</h1>
-        <h2 class="display-2">{{ ticket.name }}</h2>
-        <form action="" method="POST" class="my-4">
-            {% csrf_token %}
-            {{ form }}
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Purchase</button>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-12 col-sm-9 col-md-9 col-lg-6">
+                <div class="card my-5">
+                    <div class="card-header">Purchase <strong>{{ ticket.name }}</strong></div>
+                    <div class="card-body">
+                        <form action="" method="POST" class="my-4">
+                            {% csrf_token %}
+                            {{ form }}
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Purchase</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </form>
+            <div class="col"></div>
+        </div>
     </div>
+
 {% endblock %}

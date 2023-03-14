@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0002_alter_order_order_id_alter_order_paid_amount_and_more"),
     ]
@@ -17,7 +16,7 @@ class Migration(migrations.Migration):
                 choices=[
                     ("PENDING", "Pending"),
                     ("APPROVED", "Complete"),
-                    ("CANCELED", "Cancelled"),
+                    ("CANCELED", "Canceled"),
                     ("REFUNDED", "Refunded"),
                 ],
                 default="pending",
