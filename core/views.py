@@ -184,7 +184,6 @@ def update_order_status(json_payload: str):
         order.update(status=status)
 
 
-@referer_only
 @csrf.csrf_exempt
 def order_approved(request):
     if request.method == "POST":
@@ -192,7 +191,6 @@ def order_approved(request):
     return shortcuts.render(request, "core/order_approved.html")
 
 
-@referer_only
 @csrf.csrf_exempt
 def order_declined(request):
     if request.method == "POST":
@@ -200,7 +198,6 @@ def order_declined(request):
     return shortcuts.render(request, "core/order_declined.html")
 
 
-@referer_only
 @csrf.csrf_exempt
 def order_canceled(request):
     if request.method == "POST":
