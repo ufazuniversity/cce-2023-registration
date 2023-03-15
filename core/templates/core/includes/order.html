@@ -1,12 +1,19 @@
-<div class="card mx-auto my-2 border-info">
+<div class="card mx-auto my-3 border-info">
     <div class="card-header">
-        Order ID: <strong>{{ order.order_id }}</strong> |
-        Amount paid: <strong>{{ order.paid_amount }}</strong>
+        <div class="d-flex flex-row">
+            <div class="p-2">Order ID: <strong>{{ order.order_id }}</strong></div>
+            <div class="p-2">Status: <strong>{{ order.status }}</strong></div>
+            <div class="p-2">Amount paid: <strong>{{ order.paid_amount }} AZN</strong></div>
+            <div class="p-2">Created: <strong>{{ order.created }}</strong></div>
+            <div class="p-2">Updated: <strong>{{ order.updated }}</strong></div>
+        </div>
     </div>
     <div class="card-body">
-        <h2 class="lead mb-3">Tickets bought</h2>
+        <h2 class="lead mb-3">Tickets</h2>
         {% for ticket in order.tickets.all %}
-            {% include 'core/includes/ticket.html' with ticket=ticket %}
+            <div class="card">
+                <div class="card-body text-bold"><strong>{{ ticket.name }}</strong></div>
+            </div>
         {% endfor %}
     </div>
 </div>
