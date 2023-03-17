@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% load core_tags %}
 
-</body>
-</html>
+<footer class="bg-light p-4">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <div class="copyright">
+                © {% now "Y" %} UFAZ, All rights reserved.
+            </div>
+            <div class="contact">
+                <a href="mailto:{% settings_value 'CONTACT_EMAIL' %}"
+                   class="pe-3">{% settings_value 'CONTACT_EMAIL' %}</a>
+                <a href="tel:{% settings_value 'CONTACT_PHONE' %}">{% settings_value 'CONTACT_PHONE' %}</a>
+            </div>
+
+        </div>
+    </div>
+</footer>
