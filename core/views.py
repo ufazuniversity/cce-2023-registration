@@ -1,5 +1,6 @@
 import functools
 import logging
+import random
 import typing
 
 from django import http
@@ -130,18 +131,21 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             user = self.request.user
             price = float(ticket.price)
             # Create pending order and redirect to the acquired paymentUrl
-            order_id, session_id, payment_url = self._create_payriff_order(price)
+            # order_id, session_id, payment_url = self._create_payriff_order(price)
+
+            # Generate 6 digit random number
+            order_id = random.randint(100000, 999999)
             order = models.Order.objects.create(
                 user=user,
                 order_id=order_id,
-                session_id=session_id,
+                # session_id=session_id,
                 paid_amount=ticket.price,
             )
             data = form.cleaned_data
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
             participant = self._create_participant(ot, data)
             self._create_meal_preference(participant, data)
-            return shortcuts.redirect(payment_url)
+            return shortcuts.redirect(urls.reverse("order-approved"))
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
 

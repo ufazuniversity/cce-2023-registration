@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
+{% load core_tags %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col"></div>
             <div class="col-12 col-sm-9 col-md-9 col-lg-6">
+                <div class="alert alert-warning mt-4" role="alert">{% settings_value "NOTICE_MESSAGE" %}</div>
                 <div class="card my-5">
                     <div class="card-header">Purchase <strong>{{ ticket.name }}</strong></div>
                     <div class="card-body">

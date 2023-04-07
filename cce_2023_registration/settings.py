@@ -202,3 +202,6 @@ DEFAULT_FROM_EMAIL = "g.rustamli@ufaz.az"
 
 CONTACT_EMAIL = config("CONTACT_EMAIL")
 CONTACT_PHONE = config("CONTACT_PHONE")
+
+NOTICE_MESSAGE = "Due to technical issues we are not able to accept payments at the moment. You can register and " \
+                 "order tickets now and pay later. We will inform you when the payment is available."
