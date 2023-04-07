@@ -27,16 +27,26 @@ def area_code_choices():
 
 
 class ParticipantForm(forms.ModelForm):
-    allergies = forms.CharField(label="Allergies (optional)", widget=forms.Textarea, required=False)
-    special_request = forms.CharField(label="Special meal request (optional)", widget=forms.Textarea, required=False)
+    allergies = forms.CharField(
+        label="Allergies (optional)",
+        widget=forms.Textarea,
+        required=False,
+        help_text="Please specify if you have any allergies",
+    )
+    special_request = forms.CharField(
+        label="Special meal request (optional)",
+        widget=forms.Textarea,
+        required=False,
+        help_text="Please specify if you have any special meal request (e.g. vegetarian, vegan, halal, etc.)",
+    )
 
     class Meta:
         model = models.Participant
         exclude = ["order_ticket"]
         widgets = {
-            'fullname': forms.TextInput(attrs={'placeholder': "John Doe"}),
-            'email': forms.EmailInput(attrs={'placeholder': "john.doe@example.org"}),
-            'phone_number': forms.EmailInput(attrs={'placeholder': "+994123456789"}),
+            "fullname": forms.TextInput(attrs={"placeholder": "John Doe"}),
+            "email": forms.EmailInput(attrs={"placeholder": "john.doe@example.org"}),
+            "phone_number": forms.EmailInput(attrs={"placeholder": "+994123456789"}),
         }
 
     def __init__(self, includes_meal: bool = True, *args, **kwargs):
@@ -73,7 +83,9 @@ class ResetPasswordForm(BootstrapFormControlMixin, allauth_forms.ResetPasswordFo
     pass
 
 
-class ResetPasswordKeyFrom(BootstrapFormControlMixin, allauth_forms.ResetPasswordKeyForm):
+class ResetPasswordKeyFrom(
+    BootstrapFormControlMixin, allauth_forms.ResetPasswordKeyForm
+):
     pass
 
 
