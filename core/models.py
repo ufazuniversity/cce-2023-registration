@@ -100,6 +100,7 @@ class Participant(models.Model):
     fullname = models.CharField(max_length=50)
     email = models.EmailField()
     phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
+    nationality = models.CharField(max_length=50, null=True, blank=True)
     id_no = models.CharField(
         "Passport number / ID number", max_length=20, null=True, blank=True
     )
