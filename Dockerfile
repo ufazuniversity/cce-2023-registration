@@ -36,9 +36,10 @@ RUN pip install --no-cache /wheels/*
 
 COPY . /app
 
-RUN python manage.py collectstatic --noinput &\
-    python manage.py makemigrations &\
-    python manage.py migrate
+RUN python manage.py collectstatic --noinput &&\
+    python manage.py makemigrations &&\
+    python manage.py migrate $&\
+    python manage.py loaddata tickets.yaml
 
 HEALTHCHECK --interval=5s --timeout=3s --start-period=10s --retries=3 CMD curl --fail http://localhost:8000 || exit 1
 
@@ -46,12 +47,4 @@ RUN chown django:django /app -R
 
 USER django
 
-
-
-ENTRYPOINT ["gunicorn", "--workers", "4",\
-            "--bind", "0.0.0.0:8000",\
-            "--access-logfile", "-",\
-            "--error-logfile", "-",\
-            "--capture-output", "--log-level", "debug",\
-            "--enable-stdio-inheritance",\
-            "cce_2023_registration.wsgi:application"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
