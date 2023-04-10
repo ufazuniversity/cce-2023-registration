@@ -10,9 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import logging
+import os
 from pathlib import Path
 
+from decouple import Csv
 from decouple import config
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -22,12 +27,12 @@ BASE_DIR = PROJECT_DIR.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&!$%afenbq^ehf0^e!r%!gm)!%!r%3p*vu8(a!2q8@ro145h19"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=list, default=[])
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv(), default="")
 
 # Application definition
 
@@ -203,5 +208,24 @@ DEFAULT_FROM_EMAIL = "g.rustamli@ufaz.az"
 CONTACT_EMAIL = config("CONTACT_EMAIL")
 CONTACT_PHONE = config("CONTACT_PHONE")
 
-NOTICE_MESSAGE = "Due to technical issues we are not able to accept payments at the moment. You can register and " \
-                 "order tickets now and pay later. We will inform you when the payment is available."
+NOTICE_MESSAGE = (
+    "Due to technical issues we are not able to accept payments at the moment. You can register and "
+    "order tickets now and pay later. We will inform you when the payment is available."
+)
+
+log_level = config("DJANGO_LOG_LEVEL", default="INFO")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": config("DJANGO_LOG_LEVEL", default="INFO"),
+        "propagate": False,
+    },
+}
