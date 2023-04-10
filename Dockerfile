@@ -15,6 +15,15 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.t
 
 FROM python:3.10-slim
 
+ENV DEBUG="False"
+ENV DJANGO_LOG_LEVEL="INFO"
+ENV ALLOWED_HOSTS="0.0.0.0"
+
+ENV DATABASE_URL="sqlite:////app/db.sqlite3"
+
+ENV CONTACT_EMAIL="cce23@ufaz.az"
+ENV CONTACT_PHONE="+994 12 599 00 74"
+
 WORKDIR /app
 
 RUN addgroup --gid 1001 --system django && \
@@ -37,12 +46,7 @@ RUN chown django:django /app -R
 
 USER django
 
-ENV DEBUG="False"
-ENV DJANGO_LOG_LEVEL="INFO"
-ENV ALLOWED_HOSTS="0.0.0.0"
 
-ENV CONTACT_EMAIL="cce23@ufaz.az"
-ENV CONTACT_PHONE="+994 12 599 00 74"
 
 ENTRYPOINT ["gunicorn", "--workers", "4",\
             "--bind", "0.0.0.0:8000",\
