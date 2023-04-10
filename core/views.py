@@ -9,13 +9,11 @@ from django import urls
 from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.decorators import csrf
 from django.views.decorators import http as http_decorators
 from requests import exceptions
 
 from . import forms
 from . import models
-from . import payriff
 
 logger = logging.getLogger(__name__)
 
@@ -121,17 +119,12 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         url = self.request.build_absolute_uri(urls.reverse("order-canceled"))
         return url
 
-    def _create_payriff_order(self, price):
-        return payriff.create_order(price)
-
     def form_valid(self, form):
         ticket = self.object
         try:
 
             user = self.request.user
             price = float(ticket.price)
-            # Create pending order and redirect to the acquired paymentUrl
-            # order_id, session_id, payment_url = self._create_payriff_order(price)
 
             # Generate 6 digit random number
             order_id = random.randint(100000, 999999)
@@ -178,32 +171,31 @@ def referer_only(function):
 
     return wrap
 
-
-def update_order_status(json_payload: str):
-    order_id, session_id, status = payriff.get_order_result_details(json_payload)
-    order = models.Order.objects.filter(order_id=order_id, session_id=session_id)
-    if status == models.ORDER_STATUS_CANCELED:
-        order.delete()
-    else:
-        order.update(status=status)
-
-
-@csrf.csrf_exempt
-def order_approved(request):
-    if request.method == "POST":
-        update_order_status(request.body)
-    return shortcuts.render(request, "core/order_approved.html")
+# def update_order_status(json_payload: str):
+#     # order_id, session_id, status = payriff.get_order_result_details(json_payload)
+#     order = models.Order.objects.filter(order_id=order_id, session_id=session_id)
+#     if status == models.ORDER_STATUS_CANCELED:
+#         order.delete()
+#     else:
+#         order.update(status=status)
 
 
-@csrf.csrf_exempt
-def order_declined(request):
-    if request.method == "POST":
-        update_order_status(request.body)
-    return shortcuts.render(request, "core/order_declined.html")
+# @csrf.csrf_exempt
+# def order_approved(request):
+#     if request.method == "POST":
+#         update_order_status(request.body)
+#     return shortcuts.render(request, "core/order_approved.html")
 
 
-@csrf.csrf_exempt
-def order_canceled(request):
-    if request.method == "POST":
-        update_order_status(request.body)
-    return shortcuts.render(request, "core/order_canceled.html")
+# @csrf.csrf_exempt
+# def order_declined(request):
+#     if request.method == "POST":
+#         update_order_status(request.body)
+#     return shortcuts.render(request, "core/order_declined.html")
+
+
+# @csrf.csrf_exempt
+# def order_canceled(request):
+#     if request.method == "POST":
+#         update_order_status(request.body)
+#     return shortcuts.render(request, "core/order_canceled.html")

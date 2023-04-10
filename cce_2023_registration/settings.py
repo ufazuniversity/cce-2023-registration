@@ -137,32 +137,6 @@ STATIC_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# PAYRIFF configuration
-USE_PAYRIFF = config("USE_PAYRIFF", cast=bool, default=False)
-
-if USE_PAYRIFF:
-    PAYRIFF_BASE_URL = "https://api.payriff.com/api/v2"
-    PAYRIFF_CREATE_ORDER_URL = f"{PAYRIFF_BASE_URL}/createOrder"
-    PAYRIFF_REFUND_URL = f"{PAYRIFF_BASE_URL}/refund"
-    PAYRIFF_SECRET = config("PAYRIFF_SECRET")
-    PAYRIFF_MERCHANT_ID = config("PAYRIFF_MERCHANT_ID")
-    PAYRIFF_LANGUAGE = config("PAYRIFF_LANGUAGE", "EN")
-
-    PAYRIFF_APPROVE_URL = config(
-        "PAYRIFF_APPROVE_URL", "http://localhost:8000/order-approved"
-    )
-    PAYRIFF_CANCEL_URL = config(
-        "PAYRIFF_CANCEL_URL", "http://localhost:8000/order-canceled"
-    )
-    PAYRIFF_DECLINE_URL = config(
-        "PAYRIFF_DECLINE_URL", "http://localhost:8000/order-declined"
-    )
-
-    PAYRIFF_CURRENCY = config("PAYRIFF_CURRENCY", "AZN")
-
-    PAYRIFF_ORDER_DESCRIPTION = config("ORDER_DESCRIPTION", default="CCE'23 Registration")
-    PAYRIFF_REQUEST_TIMEOUT = config("PAYRIFF_REQUEST_TIMEOUT", default=10)
-
 # Phone-number-field settings
 PHONENUMBER_DEFAULT_REGION = config("PHONENUMBER_DEFAULT_REGION", "AZ")
 
@@ -229,3 +203,5 @@ LOGGING = {
         "propagate": False,
     },
 }
+
+CURRENCY = "AZN"
