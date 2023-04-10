@@ -48,7 +48,7 @@ class Ticket(models.Model):
 
     @property
     def visual_price(self):
-        return self.price_text or f"{self.price} {settings.PAYRIFF_CURRENCY}"
+        return self.price_text or f"{self.price} {settings.CURRENCY}"
 
 
 class FreeRegistration(models.Model):
