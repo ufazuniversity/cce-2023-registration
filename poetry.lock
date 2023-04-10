@@ -338,7 +338,7 @@ django-js-asset = ">=2.0"
 name = "django-extensions"
 version = "3.2.1"
 description = "Extensions for Django"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1492,7 +1492,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "b67fbcdbc7913aa9817a20c796100139dd2b0294b843e8d7174989f431b03255"
+content-hash = "0a06a07a8309bf1426d5deedb0e32858bd782e0b3140173dc9165f47ced916f8"
 
 [metadata.files]
 anyio = [
