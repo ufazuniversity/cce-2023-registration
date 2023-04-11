@@ -171,6 +171,7 @@ def referer_only(function):
 
     return wrap
 
+
 # def update_order_status(json_payload: str):
 #     # order_id, session_id, status = payriff.get_order_result_details(json_payload)
 #     order = models.Order.objects.filter(order_id=order_id, session_id=session_id)
@@ -181,11 +182,10 @@ def referer_only(function):
 
 
 # @csrf.csrf_exempt
-# def order_approved(request):
-#     if request.method == "POST":
-#         update_order_status(request.body)
-#     return shortcuts.render(request, "core/order_approved.html")
-
+def order_approved(request):
+    # if request.method == "POST":
+    #     update_order_status(request.body)
+    return shortcuts.render(request, "core/order_approved.html")
 
 # @csrf.csrf_exempt
 # def order_declined(request):
