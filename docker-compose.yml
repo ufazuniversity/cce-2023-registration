@@ -15,8 +15,6 @@ services:
     image: postgres:15.2-alpine3.17
     env_file:
       - .env
-    ports:
-      - "5434:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: unless-stopped
