@@ -24,6 +24,8 @@ ENV DATABASE_URL="sqlite:////app/db.sqlite3"
 ENV CONTACT_EMAIL="cce23@ufaz.az"
 ENV CONTACT_PHONE="+994 12 599 00 74"
 
+ENV USE_S3="False"
+
 WORKDIR /app
 
 RUN addgroup --gid 1001 --system django && \
