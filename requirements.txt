@@ -194,6 +194,9 @@ django-phonenumber-field[phonenumbers]==7.0.2 ; python_version >= "3.10" and pyt
 django-solo==2.0.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:7c6dbe04ae858a4645b580ec83a31a960a067ad4525d8227cca50b7fc5983a62 \
     --hash=sha256:9046eca738f2ed64dbef38c2107a02af1065a8899b4f9fabf61b06b8325de1b4
+django-storages==1.13.2 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:31dc5a992520be571908c4c40d55d292660ece3a55b8141462b4e719aa38eab3 \
+    --hash=sha256:cbadd15c909ceb7247d4ffc503f12a9bec36999df8d0bef7c31e57177d512688
 django==4.2 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:ad33ed68db9398f5dfb33282704925bce044bef4261cd4fb59e4e7f9ae505a78 \
     --hash=sha256:c36e2ab12824e2ac36afa8b2515a70c53c7742f0d6eaefa7311ec379558db997
