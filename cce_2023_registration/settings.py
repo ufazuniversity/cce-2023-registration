@@ -88,8 +88,11 @@ WSGI_APPLICATION = "cce_2023_registration.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+DATABASE_URL = config("DATABASE_URL", default="sqlite:///db.sqlite3")
+
 DATABASES = {
     "default": dj_database_url.config(
+        default=DATABASE_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
@@ -223,5 +226,3 @@ if USE_S3:
     AWS_LOCATION = config("AWS_LOCATION")
     AWS_STATIC_LOCATION = f"{AWS_LOCATION}/static"
     AWS_MEDIA_LOCATION = f"{AWS_LOCATION}/media"
-    STATIC_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STATIC_LOCATION}/"
-    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_MEDIA_LOCATION}/"
