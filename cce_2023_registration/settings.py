@@ -207,20 +207,18 @@ CURRENCY = "AZN"
 
 USE_S3 = config("USE_S3", cast=bool, default=False)
 if USE_S3:
-    DEFAULT_FILE_STORAGE = (
-        "cce_2023_registration.storage.backends.MediaRootS3Boto3Storage"
-    )
-    STATICFILES_STORAGE = (
-        "cce_2023_registration.storage.backends.StaticRootS3Boto3Storage"
-    )
+    DEFAULT_FILE_STORAGE = "cce_2023_registration.storage.MediaRootS3Boto3Storage"
+    STATICFILES_STORAGE = "cce_2023_registration.storage.StaticRootS3Boto3Storage"
     AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_ENDPOINT_URL = config("AWS_S3_ENDPOINT_URL")
+    AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com"
     AWS_S3_OBJECT_PARAMETERS = {
         "CacheControl": "max-age=86400",
         "ACL": "public-read",
     }
+    AWS_S3_CUSTOM_DOMAIN = f"ufaz-assets.ams3.cdn.digitaloceanspaces.com"
     AWS_IS_GZIPPED = True
     AWS_LOCATION = config("AWS_LOCATION")
     AWS_STATIC_LOCATION = f"{AWS_LOCATION}/static"
