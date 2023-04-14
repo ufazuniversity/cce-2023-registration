@@ -228,4 +228,4 @@ if USE_S3:
     AWS_MEDIA_LOCATION = f"{AWS_LOCATION}/media"
 
 
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default=[])
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default="")
