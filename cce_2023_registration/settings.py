@@ -226,3 +226,6 @@ if USE_S3:
     AWS_LOCATION = config("AWS_LOCATION")
     AWS_STATIC_LOCATION = f"{AWS_LOCATION}/static"
     AWS_MEDIA_LOCATION = f"{AWS_LOCATION}/media"
+
+
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv(), default=[])
