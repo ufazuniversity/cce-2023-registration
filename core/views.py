@@ -99,6 +99,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         phone_number = form_data["phone_number"]
         id_no = form_data["id_no"]
         institution = form_data["institution"]
+        nationality = form_data["nationality"]
 
         return models.Participant.objects.create(
             order_ticket=order_ticket,
@@ -108,6 +109,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             phone_number=phone_number,
             id_no=id_no,
             institution=institution,
+            nationality=nationality
         )
 
     def _approve_url(self):
