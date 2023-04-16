@@ -45,6 +45,16 @@
                                     <dt class="col-sm-3">Institution</dt>
                                     <dd class="col-sm-9">{{ participant.institution }}</dd>
                                 </dl>
+                            {% if participant.mealpreference %}
+                                {% with mp=participant.mealpreference %}
+                                <dl class="row">
+                                    <dt class="col-sm-3">Allergies</dt>
+                                    <dd class="col-sm-9">{{ mp.allergies }}</dd>
+                                    <dt class="col-sm-3">Special requests</dt>
+                                    <dd class="col-sm-9">{{ mp.special_request }}</dd>
+                                </dl>
+                                {% endwith %}
+                            {% endif %}
                             </div>
                         </div>
                     </div>
