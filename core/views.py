@@ -35,7 +35,48 @@ def index(request):
 def account(request):
     user = request.user
     orders = user.order_set.all()
-    ctx = {"orders": orders}
+    data = {
+        'orders': []
+    }
+    for order in orders:
+        ot_set = order.orderticket_set.all()
+        order_data = {
+            "details": {
+                "Order id": order.order_id,
+                "Status": order.status,
+                "Price": order.paid_amount,
+                "Created": order.created,
+                "Updated": order.updated,
+            },
+            "tickets": []
+        }
+        for ot in ot_set:
+            ticket = ot.ticket
+            participant = ot.participant
+            try:
+                participant = participant.studentparticipant
+            except models.StudentParticipant.DoesNotExist:
+                pass
+            p_fields = ['title', 'fullname', 'email', 'phone_number', 'nationality', 'id_no', 'institution',
+                        'student_id']
+            participant_data = {k.capitalize().replace("_", " "): getattr(participant, k) for k in p_fields if
+                                hasattr(participant, k)}
+            ticket_data = {
+                "name": ticket.name,
+                "participant": {
+                    "details": participant_data,
+                }
+            }
+            try:
+                mp = participant.mealpreference
+                mp_fields = ['allergies', 'special_request']
+                ticket_data["participant"]["meal_preference"] = {k.capitalize().replace("_", " "): getattr(mp, k) for k
+                                                                 in mp_fields}
+            except models.MealPreference.DoesNotExist:
+                pass
+            order_data['tickets'].append(ticket_data)
+        data['orders'].append(order_data)
+    ctx = {"data": data}
     return shortcuts.render(request, "core/account.html", ctx)
 
 
@@ -74,44 +115,6 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             kwargs["includes_meal"] = self.object.includes_dinner
         return kwargs
 
-    def _create_meal_preference(
-            self, participant: models.Participant, form_data: dict
-    ) -> None:
-        allergies = form_data.pop("allergies", None)
-        special_request = form_data.pop("special_request", None)
-        if allergies or special_request:
-            models.MealPreference.objects.create(
-                participant=participant,
-                allergies=allergies,
-                special_request=special_request,
-            )
-
-    def _create_participant(
-            self, order_ticket: models.OrderTicket, form_data: dict
-    ) -> models.Participant:
-        ticket = self.object
-
-        if ticket.variant == models.TICKET_VARIANT_STUDENT:
-            return models.StudentParticipant(order_ticket=order_ticket, **form_data)
-        title = form_data['title']
-        fullname = form_data["fullname"]
-        email = form_data["email"]
-        phone_number = form_data["phone_number"]
-        id_no = form_data["id_no"]
-        institution = form_data["institution"]
-        nationality = form_data["nationality"]
-
-        return models.Participant.objects.create(
-            order_ticket=order_ticket,
-            title=title,
-            fullname=fullname,
-            email=email,
-            phone_number=phone_number,
-            id_no=id_no,
-            institution=institution,
-            nationality=nationality
-        )
-
     def _approve_url(self):
         return self.request.build_absolute_uri(urls.reverse("order-approved"))
 
@@ -121,6 +124,21 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
     def _cancel_url(self):
         url = self.request.build_absolute_uri(urls.reverse("order-canceled"))
         return url
+
+    def save_participant(self, order_ticket, form_data):
+        ticket = self.object
+        participant_model = models.Participant
+        if ticket.variant == models.TICKET_VARIANT_STUDENT:
+            participant_model = models.StudentParticipant
+        allergies = form_data.pop("allergies", None)
+        special_request = form_data.pop("special_request", None)
+        participant = participant_model.objects.create(order_ticket=order_ticket, **form_data)
+        if ticket.includes_dinner:
+            models.MealPreference.objects.create(
+                participant=participant,
+                allergies=allergies,
+                special_request=special_request,
+            )
 
     def form_valid(self, form):
         ticket = self.object
@@ -137,10 +155,8 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
                 # session_id=session_id,
                 paid_amount=ticket.price,
             )
-            data = form.cleaned_data
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
-            participant = self._create_participant(ot, data)
-            self._create_meal_preference(participant, data)
+            self.save_participant(ot, form.cleaned_data)
             return shortcuts.redirect(urls.reverse("order-approved"))
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
