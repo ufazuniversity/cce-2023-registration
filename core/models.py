@@ -96,7 +96,17 @@ class OrderTicket(models.Model):
 
 
 class Participant(models.Model):
+    TITLE_CHOICES = (
+        ('Mr', 'Mr'),
+        ('Mrs', 'Mrs'),
+        ('Ms', 'Ms'),
+        ('Miss', 'Miss'),
+        ('Dr', 'Dr'),
+        ('Prof', 'Prof'),
+        ('Sir', 'Sir'),
+    )
     order_ticket = models.OneToOneField(OrderTicket, on_delete=models.CASCADE)
+    title = models.CharField(max_length=10, choices=TITLE_CHOICES, null=True)
     fullname = models.CharField(max_length=50)
     email = models.EmailField()
     phone_number = pn_fields.PhoneNumberField(null=True, blank=True)
