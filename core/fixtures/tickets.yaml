@@ -14,6 +14,7 @@
     price: 925
     price_text: "500€ (925 AZN)"
     variant: "other"
+    includes_dinner: True
 
 - model: core.ticket
   pk: 3
@@ -24,6 +25,7 @@
     price: 555
     price_text: "300€ (555 AZN)"
     variant: "other"
+    includes_dinner: True
 
 - model: core.ticket
   pk: 4
@@ -34,6 +36,7 @@
     price: 370
     price_text: "200€ (370 AZN)"
     variant: "student"
+    includes_dinner: True
 
 - model: core.ticket
   pk: 5
@@ -44,6 +47,7 @@
     price: 277
     price_text: "150€ (277 AZN)"
     variant: "student"
+    includes_dinner: True
 
 - model: core.ticket
   pk: 6
@@ -72,4 +76,5 @@
     is_paid: True
     price: 130
     price_text: "70€ (130 AZN)"
+    includes_dinner: True
 
