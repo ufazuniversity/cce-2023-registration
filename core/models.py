@@ -132,6 +132,10 @@ class MealPreference(models.Model):
         null=True, blank=True, help_text="E.g halal, kosher, vegetarian etc."
     )
 
+    @property
+    def fields(self):
+        return self._meta.get_fields()
+
 
 class Refund(models.Model):
     order = models.OneToOneField(Order, on_delete=models.PROTECT)

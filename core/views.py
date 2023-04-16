@@ -35,7 +35,48 @@ def index(request):
 def account(request):
     user = request.user
     orders = user.order_set.all()
-    ctx = {"orders": orders}
+    data = {
+        'orders': []
+    }
+    for order in orders:
+        ot_set = order.orderticket_set.all()
+        order_data = {
+            "details": {
+                "Order id": order.order_id,
+                "Status": order.status,
+                "Price": order.paid_amount,
+                "Created": order.created,
+                "Updated": order.updated,
+            },
+            "tickets": []
+        }
+        for ot in ot_set:
+            ticket = ot.ticket
+            participant = ot.participant
+            try:
+                participant = participant.studentparticipant
+            except models.StudentParticipant.DoesNotExist:
+                pass
+            p_fields = ['title', 'fullname', 'email', 'phone_number', 'nationality', 'id_no', 'institution',
+                        'student_id']
+            participant_data = {k.capitalize().replace("_", " "): getattr(participant, k) for k in p_fields if
+                                hasattr(participant, k)}
+            ticket_data = {
+                "name": ticket.name,
+                "participant": {
+                    "details": participant_data,
+                }
+            }
+            try:
+                mp = participant.mealpreference
+                mp_fields = ['allergies', 'special_request']
+                ticket_data["participant"]["meal_preference"] = {k.capitalize().replace("_", " "): getattr(mp, k) for k
+                                                                 in mp_fields}
+            except models.MealPreference.DoesNotExist:
+                pass
+            order_data['tickets'].append(ticket_data)
+        data['orders'].append(order_data)
+    ctx = {"data": data}
     return shortcuts.render(request, "core/account.html", ctx)
 
 

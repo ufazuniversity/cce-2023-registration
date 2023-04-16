@@ -1,15 +1,46 @@
 <div class="card mx-auto my-3 border-info">
     <div class="card-header">
         <div class="d-flex flex-row">
-            <div class="p-2">Order ID: <strong>{{ order.order_id }}</strong></div>
-            <div class="p-2">Status: <strong>{{ order.status }}</strong></div>
-            <div class="p-2">Price: <strong>{{ order.paid_amount }} AZN</strong></div>
-            <div class="p-2">Created: <strong>{{ order.created }}</strong></div>
-            <div class="p-2">Updated: <strong>{{ order.updated }}</strong></div>
+            {% for k, v in order.details.items %}
+                <div class="p-2">{{ k }}: <strong>{{ v }}</strong></div>
+            {% endfor %}
         </div>
     </div>
     <div class="card-body">
         <h2 class="lead mb-3">Tickets</h2>
+        {% for ticket in order.tickets %}
+            <div class="card">
+                <div class="accordion" id="orderAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="#collapseParticipant"
+                                    aria-expanded="true" aria-controls="collapseParticipant">{{ ticket.name }}</button>
+                        </h2>
+                        <div id="collapseParticipant" class="accordion-collapse collapse show"
+                             data-bs-parent="#orderAccordion">
+                            <div class="accordion-body">
+                                <dl class="row">
+                                    {% for k, v in ticket.participant.details.items %}
+                                        <dt class="col-sm-3">{{ k }}</dt>
+                                        <dd class="col-sm-9">{{ v }}</dd>
+                                    {% endfor %}
+                                </dl>
+                            {% if ticket.participant.meal_preference %}
+                                {% with mp=ticket.participant.meal_preference %}
+                                <dl class="row">
+                                    {% for k, v in mp.items %}
+                                        <dt class="col-sm-3">{{ k }}</dt>
+                                        <dd class="col-sm-9">{{ v }}</dd>
+                                    {% endfor %}
+                                </dl>
+                                {% endwith %}
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
         {% for ot in order.orderticket_set.all %}
             {% with ticket=ot.ticket participant=ot.participant %}
             <div class="card">
@@ -22,39 +53,39 @@
                         <div id="collapseParticipant" class="accordion-collapse collapse show"
                              data-bs-parent="#orderAccordion">
                             <div class="accordion-body">
-                                <h3>Participant details</h3>
-                                <dl class="row">
-                                    {% if participant.title %}
-                                    <dt class="col-sm-3">Title</dt>
-                                    <dd class="col-sm-9">{{ participant.title}}</dd>
-                                    {% endif %}
-                                    <dt class="col-sm-3">Full name</dt>
-                                    <dd class="col-sm-9">{{ participant.fullname }}</dd>
-
-                                    <dt class="col-sm-3">Email</dt>
-                                    <dd class="col-sm-9">{{ participant.email }}</dd>
-
-                                    <dt class="col-sm-3">Phone number</dt>
-                                    <dd class="col-sm-9">{{ participant.phone_number }}</dd>
-
-                                    <dt class="col-sm-3">Nationality</dt>
-                                    <dd class="col-sm-9">{{ participant.nationality }}</dd>
-
-                                    <dt class="col-sm-3">Passport number / ID number</dt>
-                                    <dd class="col-sm-9">{{ participant.id_no }}</dd>
-                                    <dt class="col-sm-3">Institution</dt>
-                                    <dd class="col-sm-9">{{ participant.institution }}</dd>
-                                </dl>
-                            {% if participant.mealpreference %}
-                                {% with mp=participant.mealpreference %}
-                                <dl class="row">
-                                    <dt class="col-sm-3">Allergies</dt>
-                                    <dd class="col-sm-9">{{ mp.allergies }}</dd>
-                                    <dt class="col-sm-3">Special requests</dt>
-                                    <dd class="col-sm-9">{{ mp.special_request }}</dd>
-                                </dl>
-                                {% endwith %}
-                            {% endif %}
+{#                                <h3>Participant details</h3>#}
+{#                                <dl class="row">#}
+{#                                    {% if participant.title %}#}
+{#                                    <dt class="col-sm-3">Title</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.title}}</dd>#}
+{#                                    {% endif %}#}
+{#                                    <dt class="col-sm-3">Full name</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.fullname }}</dd>#}
+{##}
+{#                                    <dt class="col-sm-3">Email</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.email }}</dd>#}
+{##}
+{#                                    <dt class="col-sm-3">Phone number</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.phone_number }}</dd>#}
+{##}
+{#                                    <dt class="col-sm-3">Nationality</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.nationality }}</dd>#}
+{##}
+{#                                    <dt class="col-sm-3">Passport number / ID number</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.id_no }}</dd>#}
+{#                                    <dt class="col-sm-3">Institution</dt>#}
+{#                                    <dd class="col-sm-9">{{ participant.institution }}</dd>#}
+{#                                </dl>#}
+{#                            {% if participant.mealpreference %}#}
+{#                                {% with mp=participant.mealpreference %}#}
+{#                                <dl class="row">#}
+{#                                    <dt class="col-sm-3">Allergies</dt>#}
+{#                                    <dd class="col-sm-9">{{ mp.allergies }}</dd>#}
+{#                                    <dt class="col-sm-3">Special requests</dt>#}
+{#                                    <dd class="col-sm-9">{{ mp.special_request }}</dd>#}
+{#                                </dl>#}
+{#                                {% endwith %}#}
+{#                            {% endif %}#}
                             </div>
                         </div>
                     </div>
