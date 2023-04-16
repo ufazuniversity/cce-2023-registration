@@ -116,6 +116,10 @@ class Participant(models.Model):
     )
     institution = models.CharField("Institution name", max_length=100, null=True, blank=True)
 
+    @property
+    def fields(self):
+        return self._meta.get_fields()
+
 
 class StudentParticipant(Participant):
     student_id = models.CharField(max_length=50)
