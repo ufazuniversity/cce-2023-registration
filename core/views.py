@@ -76,16 +76,15 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
     def _create_meal_preference(
             self, participant: models.Participant, form_data: dict
-    ) -> typing.Optional[models.MealPreference]:
+    ) -> None:
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
         if allergies or special_request:
-            return models.MealPreference(
+            models.MealPreference.objects.create(
                 participant=participant,
                 allergies=allergies,
                 special_request=special_request,
             )
-        return None
 
     def _create_participant(
             self, order_ticket: models.OrderTicket, form_data: dict
@@ -100,7 +99,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         id_no = form_data["id_no"]
         institution = form_data["institution"]
 
-        return models.Participant(
+        return models.Participant.objects.create(
             order_ticket=order_ticket,
             fullname=fullname,
             email=email,
