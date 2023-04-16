@@ -93,6 +93,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
         if ticket.variant == models.TICKET_VARIANT_STUDENT:
             return models.StudentParticipant(order_ticket=order_ticket, **form_data)
+        title = form_data['title']
         fullname = form_data["fullname"]
         email = form_data["email"]
         phone_number = form_data["phone_number"]
@@ -101,6 +102,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 
         return models.Participant.objects.create(
             order_ticket=order_ticket,
+            title=title,
             fullname=fullname,
             email=email,
             phone_number=phone_number,
