@@ -14,7 +14,7 @@
                             {% csrf_token %}
                             {{ form }}
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Purchase</button>
+                                <button type="submit" class="btn btn-primary">Purchase - {{ ticket.visual_price }}</button>
                             </div>
                         </form>
                     </div>
