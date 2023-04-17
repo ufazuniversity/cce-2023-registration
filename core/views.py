@@ -76,7 +76,7 @@ def account(request):
                 pass
             order_data['tickets'].append(ticket_data)
         data['orders'].append(order_data)
-    ctx = {"data": data}
+    ctx = {"data": data, "user": user}
     return shortcuts.render(request, "core/account.html", ctx)
 
 

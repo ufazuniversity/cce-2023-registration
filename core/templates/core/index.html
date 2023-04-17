@@ -9,7 +9,7 @@
             <form action="{% url 'free-register' %}" method="POST">
                 {% csrf_token %}
                 <div class="d-grid gap-2 col-6 mx-auto my-5">
-                    <input type="submit" value="Free register for online attendance" class="btn btn-primary btn-lg">
+                    <input type="submit" value="Free register for online attendance (only for non-presenter participants)." class="btn btn-primary btn-lg">
                 </div>
             </form>
         {% else %}

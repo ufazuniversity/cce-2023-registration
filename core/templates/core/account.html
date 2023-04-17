@@ -2,9 +2,11 @@
 
 {% block content %}
     <div class="container">
+        {% if user.freeregistration %}
         <div class="my-5">
-            <div class="alert alert-primary" role="alert">You are registered for free online attendance.</div>
+            <div class="alert alert-primary" role="alert">You are registered for free online attendance (Only for non-presenter participants).</div>
         </div>
+        {% endif %}
         {% with orders=data.orders %}
             {% if orders %}
                 <h2 class="my-4">Your ticket orders</h2>
