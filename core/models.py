@@ -44,7 +44,7 @@ class Ticket(models.Model):
     includes_dinner = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.site} - {self.name}"
 
     @property
     def visual_price(self):
@@ -94,6 +94,9 @@ class OrderTicket(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.ticket)
+
 
 class Participant(models.Model):
     TITLE_CHOICES = (
@@ -115,6 +118,9 @@ class Participant(models.Model):
         "Passport number / ID number", max_length=20, null=True, blank=True
     )
     institution = models.CharField("Institution name", max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.title} {self.fullname} <{self.email}>"
 
     @property
     def fields(self):
