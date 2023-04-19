@@ -44,7 +44,7 @@ class Ticket(models.Model):
     includes_dinner = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return f"{self.site} - {self.name}"
 
     @property
     def visual_price(self):
@@ -93,6 +93,9 @@ class Order(models.Model):
 class OrderTicket(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.ticket)
 
 
 class Participant(models.Model):
