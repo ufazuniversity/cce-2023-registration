@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TKKPG>
+    <Request>
+        <Operation>CreateOrder</Operation>
+        <Language>RU</Language>
+        <Order>
+            <OrderType>Purchase</OrderType>
+            <Merchant>{{ kp_merchant_id }}</Merchant>
+            <Amount>{{ kp_amount }}</Amount>
+            <Currency>{{ kp_currency }}</Currency>
+            <Description>{{ kp_description }}</Description>
+            <ApproveURL>{{ kp_approve_url }}</ApproveURL>
+            <CancelURL>{{ kp_cancel_url }}</CancelURL>
+            <DeclineURL>{{ kp_decline_url }}</DeclineURL>
+        </Order>
+    </Request>
+</TKKPG>
