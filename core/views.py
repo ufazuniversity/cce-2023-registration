@@ -10,10 +10,12 @@ from django.contrib.auth import decorators
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators import http as http_decorators
+from django.views.decorators.csrf import csrf_exempt
 from requests import exceptions
 
 from . import forms
 from . import models
+from . import ecommerce
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +37,7 @@ def index(request):
 def account(request):
     user = request.user
     orders = user.order_set.all()
-    data = {
-        'orders': []
-    }
+    data = {"orders": []}
     for order in orders:
         ot_set = order.orderticket_set.all()
         order_data = {
@@ -48,7 +48,7 @@ def account(request):
                 "Created": order.created,
                 "Updated": order.updated,
             },
-            "tickets": []
+            "tickets": [],
         }
         for ot in ot_set:
             ticket = ot.ticket
@@ -57,25 +57,37 @@ def account(request):
                 participant = participant.studentparticipant
             except models.StudentParticipant.DoesNotExist:
                 pass
-            p_fields = ['title', 'fullname', 'email', 'phone_number', 'nationality', 'id_no', 'institution',
-                        'student_id']
-            participant_data = {k.capitalize().replace("_", " "): getattr(participant, k) for k in p_fields if
-                                hasattr(participant, k)}
+            p_fields = [
+                "title",
+                "fullname",
+                "email",
+                "phone_number",
+                "nationality",
+                "id_no",
+                "institution",
+                "student_id",
+            ]
+            participant_data = {
+                k.capitalize().replace("_", " "): getattr(participant, k)
+                for k in p_fields
+                if hasattr(participant, k)
+            }
             ticket_data = {
                 "name": ticket.name,
                 "participant": {
                     "details": participant_data,
-                }
+                },
             }
             try:
                 mp = participant.mealpreference
-                mp_fields = ['allergies', 'special_request']
-                ticket_data["participant"]["meal_preference"] = {k.capitalize().replace("_", " "): getattr(mp, k) for k
-                                                                 in mp_fields}
+                mp_fields = ["allergies", "special_request"]
+                ticket_data["participant"]["meal_preference"] = {
+                    k.capitalize().replace("_", " "): getattr(mp, k) for k in mp_fields
+                }
             except models.MealPreference.DoesNotExist:
                 pass
-            order_data['tickets'].append(ticket_data)
-        data['orders'].append(order_data)
+            order_data["tickets"].append(ticket_data)
+        data["orders"].append(order_data)
     ctx = {"data": data, "user": user}
     return shortcuts.render(request, "core/account.html", ctx)
 
@@ -132,7 +144,9 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             participant_model = models.StudentParticipant
         allergies = form_data.pop("allergies", None)
         special_request = form_data.pop("special_request", None)
-        participant = participant_model.objects.create(order_ticket=order_ticket, **form_data)
+        participant = participant_model.objects.create(
+            order_ticket=order_ticket, **form_data
+        )
         if ticket.includes_dinner:
             models.MealPreference.objects.create(
                 participant=participant,
@@ -180,41 +194,8 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
         return super().post(request, *args, **kwargs)
 
 
-def referer_only(function):
-    @functools.wraps(function)
-    def wrap(request, *args, **kwargs):
-        if request.method == "GET" and request.headers.get("referer") is None:
-            return http.HttpResponseNotFound()
-        else:
-            return function(request, *args, **kwargs)
-
-    return wrap
-
-
-# def update_order_status(json_payload: str):
-#     # order_id, session_id, status = payriff.get_order_result_details(json_payload)
-#     order = models.Order.objects.filter(order_id=order_id, session_id=session_id)
-#     if status == models.ORDER_STATUS_CANCELED:
-#         order.delete()
-#     else:
-#         order.update(status=status)
-
-
-# @csrf.csrf_exempt
-def order_approved(request):
-    # if request.method == "POST":
-    #     update_order_status(request.body)
-    return shortcuts.render(request, "core/order_approved.html")
-
-# @csrf.csrf_exempt
-# def order_declined(request):
-#     if request.method == "POST":
-#         update_order_status(request.body)
-#     return shortcuts.render(request, "core/order_declined.html")
-
-
-# @csrf.csrf_exempt
-# def order_canceled(request):
-#     if request.method == "POST":
-#         update_order_status(request.body)
-#     return shortcuts.render(request, "core/order_canceled.html")
+@method_decorator(csrf_exempt, name="dispatch")
+class KBStatusView(generic.TemplateView):
+    def post(self, request, *args, **kwargs):
+        models.KBOrder.objects.update_from_response_xml(request.POST['xmlmsg'])
+        return http.HttpResponse(status=200)
