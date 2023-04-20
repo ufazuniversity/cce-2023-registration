@@ -1,9 +1,11 @@
 from ckeditor import fields as ck_fields
 from django.conf import settings
 from django.contrib.auth import models as auth_models
+from django import shortcuts
 from django.db import models
 from phonenumber_field import modelfields as pn_fields
 from solo.models import SingletonModel
+from . import ecommerce
 
 
 class RegistrationSettings(SingletonModel):
@@ -160,3 +162,53 @@ class Refund(models.Model):
 
     def __str__(self):
         return self.order_id
+
+
+KB_ORDER_STATUS_PENDING = "PENDING"
+KB_ORDER_STATUS_APPROVED = "APPROVED"
+KB_ORDER_STATUS_CANCELED = "CANCELED"
+KB_ORDER_STATUS_DECLINED = "DECLINED"
+
+
+class KBOrder(models.Model):
+    STATUS_CHOICES = (
+        (KB_ORDER_STATUS_PENDING, "Pending"),
+        (KB_ORDER_STATUS_APPROVED, "Approved"),
+        (KB_ORDER_STATUS_CANCELED, "Canceled"),
+        (KB_ORDER_STATUS_DECLINED, "Declined"),
+    )
+    my_order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    order_id = models.CharField(max_length=10, unique=True)
+    session_id = models.CharField(max_length=50, unique=True)
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default=KB_ORDER_STATUS_PENDING
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Order ID = {self.order_id}, Session ID = {self.session_id}"
+
+    def save(self, *args, **kwargs):
+        url = None
+        if not self.pk:
+            # send request to Kapitalbank Ecommerce the first time the order is saved
+            order_id, session_id, url = ecommerce.create_order(self.amount)
+            self.order_id = order_id
+            self.session_id = session_id
+        super().save(*args, **kwargs)
+        if url is not None:
+            return shortcuts.redirect(url)
+
+    def is_pending(self):
+        return self.status == KB_ORDER_STATUS_PENDING
+
+    def is_approved(self):
+        return self.status == KB_ORDER_STATUS_APPROVED
+
+    def is_declined(self):
+        return self.status == KB_ORDER_STATUS_DECLINED
+
+    def is_canceled(self):
+        return self.status == KB_ORDER_STATUS_CANCELED
