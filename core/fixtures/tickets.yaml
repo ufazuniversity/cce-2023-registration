@@ -1,14 +1,17 @@
 - model: core.ticket
   pk: 1
   fields:
-    name: "Non-presenter participants"
+    name: "Online student presenters (with a valid student ID at the moment of registration)"
     site: "online"
-    is_paid: False
+    is_paid: True
+    price: 185
+    price_text: "100€ (185 AZN)"
+    variant: "student"
 
 - model: core.ticket
   pk: 2
   fields:
-    name: "Non academic participants"
+    name: "In-person non academic participants"
     site: "in-person"
     is_paid: True
     price: 925
@@ -19,7 +22,7 @@
 - model: core.ticket
   pk: 3
   fields:
-    name: "Academic attendees (researchers, lecturers, assistant professors, associate professors, professors, …)"
+    name: "In-person academic attendees (researchers, lecturers, assistant professors, associate professors, professors, …)"
     site: "in-person"
     is_paid: True
     price: 555
@@ -30,7 +33,7 @@
 - model: core.ticket
   pk: 4
   fields:
-    name: "Student co-authors (Bachelor, Master or PhD students with a valid student ID at the moment of registration)"
+    name: "In-person student co-authors (Bachelor, Master or PhD students with a valid student ID at the moment of registration)"
     site: "in-person"
     is_paid: True
     price: 370
@@ -41,7 +44,7 @@
 - model: core.ticket
   pk: 5
   fields:
-    name: "Student non-co-authors (with a valid student ID at the moment of registration)"
+    name: "In-person student non-co-authors (with a valid student ID at the moment of registration)"
     site: "in-person"
     is_paid: True
     price: 277
@@ -52,21 +55,21 @@
 - model: core.ticket
   pk: 6
   fields:
-    name: "Azerbaijan residents (social event + dinner to be purchased separately)"
+    name: "In-person Azerbaijan residents (social event + dinner to be purchased separately)"
     site: "in-person"
     is_paid: True
     price: 200
-    variant: "student"
+    variant: "other"
 
 - model: core.ticket
   pk: 7
   fields:
-    name: "Academic presenters"
+    name: "Online academic presenters"
     site: online
     is_paid: True
-    price: 185
-    price_text: "100€ (185 AZN)"
-    variant: "student"
+    price: 370
+    price_text: "200€ (370 AZN)"
+    variant: "other"
 
 - model: core.ticket
   pk: 8
