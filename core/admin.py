@@ -101,7 +101,8 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "order_id",
-        "session_id",
+        "kb_order_id",
+        "kb_session_id",
         "paid_amount",
         "updated",
         "status",

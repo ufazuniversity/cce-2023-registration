@@ -65,18 +65,26 @@ class Order(models.Model):
         (ORDER_STATUS_REFUNDED, "Refunded"),
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
-    order_id = models.CharField(
-        verbose_name="Payriff order ID", max_length=10, unique=True, null=True, blank=True
+    order_id = models.CharField(max_length=10, unique=True, null=True, blank=True)
+    kb_order_id = models.CharField(
+        "Kapitalbank Ecommerce Order ID",
+        max_length=10,
+        unique=True,
+        null=True,
+        blank=True,
     )
-    session_id = models.CharField(
-        verbose_name="Payriff session ID",
+
+    kb_session_id = models.CharField(
+        verbose_name="Kapitalbank Ecommerce Session ID",
         max_length=50,
         null=True,
         blank=True,
         unique=True,
     )
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
-    paid_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    paid_amount = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(
@@ -87,7 +95,7 @@ class Order(models.Model):
         return str(self.id)
 
     class Meta:
-        unique_together = ("order_id", "session_id")
+        unique_together = ("kb_order_id", "kb_session_id")
 
 
 class OrderTicket(models.Model):
@@ -100,13 +108,13 @@ class OrderTicket(models.Model):
 
 class Participant(models.Model):
     TITLE_CHOICES = (
-        ('Mr', 'Mr'),
-        ('Mrs', 'Mrs'),
-        ('Ms', 'Ms'),
-        ('Miss', 'Miss'),
-        ('Dr', 'Dr'),
-        ('Prof', 'Prof'),
-        ('Sir', 'Sir'),
+        ("Mr", "Mr"),
+        ("Mrs", "Mrs"),
+        ("Ms", "Ms"),
+        ("Miss", "Miss"),
+        ("Dr", "Dr"),
+        ("Prof", "Prof"),
+        ("Sir", "Sir"),
     )
     order_ticket = models.OneToOneField(OrderTicket, on_delete=models.CASCADE)
     title = models.CharField(max_length=10, choices=TITLE_CHOICES, null=True)
@@ -117,7 +125,9 @@ class Participant(models.Model):
     id_no = models.CharField(
         "Passport number / ID number", max_length=20, null=True, blank=True
     )
-    institution = models.CharField("Institution name", max_length=100, null=True, blank=True)
+    institution = models.CharField(
+        "Institution name", max_length=100, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.title} {self.fullname} <{self.email}>"
