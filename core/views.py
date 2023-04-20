@@ -159,13 +159,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             price = float(ticket.price)
 
             # Generate 6 digit random number
-            order_id = random.randint(100000, 999999)
-            order = models.Order.objects.create(
-                user=user,
-                order_id=order_id,
-                # session_id=session_id,
-                paid_amount=ticket.price,
-            )
+            order = models.Order.objects.create(user=user, amount=ticket.price)
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
             self.save_participant(ot, form.cleaned_data)
             return shortcuts.redirect(urls.reverse("order-approved"))

@@ -1,3 +1,4 @@
+import random
 from ckeditor import fields as ck_fields
 from django.conf import settings
 from django.contrib.auth import models as auth_models
@@ -59,9 +60,14 @@ class FreeRegistration(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
 
+def random_id():
+    # generates 6 digit random number
+    return str(random.randint(100000, 999999))
+
+
 class Order(models.Model):
     user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
-    order_id = models.CharField(max_length=10, unique=True, null=True, blank=True)
+    order_id = models.CharField(max_length=10, unique=True, default=random_id)
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
     amount = models.DecimalField(
         max_digits=8, decimal_places=2, null=True, blank=True
