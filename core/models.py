@@ -6,6 +6,7 @@ from django.db import models
 from phonenumber_field import modelfields as pn_fields
 from solo.models import SingletonModel
 from . import ecommerce
+from . import managers
 
 
 class RegistrationSettings(SingletonModel):
@@ -186,6 +187,7 @@ class KBOrder(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    objects = managers.KBOrderManager()
 
     def __str__(self):
         return f"Order ID = {self.order_id}, Session ID = {self.session_id}"
