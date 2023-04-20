@@ -82,6 +82,9 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def redirect_to_payment(self, request):
+        KBOrder.objects.create(my_order=self, amount=self.amount)
+
 
 class OrderTicket(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
