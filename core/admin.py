@@ -103,7 +103,6 @@ class OrderAdmin(admin.ModelAdmin):
         "order_id",
         "amount",
         "updated",
-        "status",
     ]
     inlines = [OrderTicketInlineAdmin]
 

@@ -60,13 +60,6 @@ class FreeRegistration(models.Model):
 
 
 class Order(models.Model):
-    STATUS_CHOICES = (
-        (ORDER_STATUS_PENDING, "Pending"),
-        (ORDER_STATUS_APPROVED, "Approved"),
-        (ORDER_STATUS_CANCELED, "Canceled"),
-        (ORDER_STATUS_DECLINED, "Declined"),
-        (ORDER_STATUS_REFUNDED, "Refunded"),
-    )
     user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=10, unique=True, null=True, blank=True)
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
@@ -75,9 +68,6 @@ class Order(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.CharField(
-        choices=STATUS_CHOICES, max_length=12, null=True, blank=True, default="PENDING"
-    )
 
     def __str__(self):
         return str(self.id)
