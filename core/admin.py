@@ -103,8 +103,13 @@ class OrderAdmin(admin.ModelAdmin):
         "order_id",
         "amount",
         "updated",
+        "get_status"
     ]
     inlines = [OrderTicketInlineAdmin]
+
+    def get_status(self, obj):
+        return obj.status
+    get_status.short_description = "Status"
 
     def has_change_permission(self, request, obj=None):
         return False

@@ -72,6 +72,13 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
+    @property
+    def status(self):
+        try:
+            return KBOrder.objects.filter(my_order=self).last().status
+        except AttributeError:
+            return None
+
     def redirect_to_payment(self, request):
         KBOrder.objects.create(my_order=self, amount=self.amount)
 
