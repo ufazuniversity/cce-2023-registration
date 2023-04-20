@@ -154,11 +154,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
     def form_valid(self, form):
         ticket = self.object
         try:
-
             user = self.request.user
-            price = float(ticket.price)
-
-            # Generate 6 digit random number
             order = models.Order.objects.create(user=user, amount=ticket.price)
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
             self.save_participant(ot, form.cleaned_data)
