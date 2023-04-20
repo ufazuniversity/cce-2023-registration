@@ -69,23 +69,8 @@ class Order(models.Model):
     )
     user = models.ForeignKey(auth_models.User, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=10, unique=True, null=True, blank=True)
-    kb_order_id = models.CharField(
-        "Kapitalbank Ecommerce Order ID",
-        max_length=10,
-        unique=True,
-        null=True,
-        blank=True,
-    )
-
-    kb_session_id = models.CharField(
-        verbose_name="Kapitalbank Ecommerce Session ID",
-        max_length=50,
-        null=True,
-        blank=True,
-        unique=True,
-    )
     tickets = models.ManyToManyField(Ticket, through="OrderTicket")
-    paid_amount = models.DecimalField(
+    amount = models.DecimalField(
         max_digits=8, decimal_places=2, null=True, blank=True
     )
     created = models.DateTimeField(auto_now_add=True)
@@ -96,9 +81,6 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-    class Meta:
-        unique_together = ("kb_order_id", "kb_session_id")
 
 
 class OrderTicket(models.Model):
