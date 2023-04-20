@@ -9,7 +9,10 @@ from core import models
 
 @admin.register(models.Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ["name", "is_paid", "price", "is_active", "variant"]
+    list_display = ["get_title", "is_paid", "price", "is_active", "variant", "site"]
+
+    def get_title(self, obj):
+        return f"{obj.site.capitalize()} - {obj.name}"
 
 
 @admin.register(models.FreeRegistration)
