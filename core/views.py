@@ -1,7 +1,5 @@
-import functools
 import logging
 import random
-import typing
 
 from django import http
 from django import shortcuts
@@ -15,7 +13,6 @@ from requests import exceptions
 
 from . import forms
 from . import models
-from . import ecommerce
 
 logger = logging.getLogger(__name__)
 
