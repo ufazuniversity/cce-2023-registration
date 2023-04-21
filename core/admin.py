@@ -96,6 +96,13 @@ class OrderTicketInlineAdmin(admin.StackedInline):
     can_delete = False
 
 
+class KBOrderInlne(admin.TabularInline):
+    model = models.KBOrder
+    fk_name = "my_order"
+    readonly_fields = ["order_id", "session_id", "status", "updated"]
+    can_delete = False
+    extra = 0
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
@@ -105,7 +112,7 @@ class OrderAdmin(admin.ModelAdmin):
         "updated",
         "get_status"
     ]
-    inlines = [OrderTicketInlineAdmin]
+    inlines = [OrderTicketInlineAdmin, KBOrderInlne]
 
     def get_status(self, obj):
         return obj.status
