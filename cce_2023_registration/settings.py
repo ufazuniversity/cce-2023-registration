@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.forms",
     "django_extensions",
-    "django_browser_reload",
     "phonenumber_field",
     "ckeditor",
     "allauth",
