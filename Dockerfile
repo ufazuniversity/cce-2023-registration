@@ -26,6 +26,8 @@ ENV CONTACT_PHONE="+994 12 599 00 74"
 
 ENV USE_S3="False"
 
+ENV KB_ECOMM_LANGUAGE="EN"
+
 WORKDIR /app
 
 RUN addgroup --gid 1001 --system django && \

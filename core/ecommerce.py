@@ -17,6 +17,7 @@ class CreateOrderPayload:
     description: str
     merchant_id: str
     currency: str
+    language: str
 
     def to_xml(self):
         return loader.render_to_string(
@@ -33,12 +34,13 @@ def create_order(
     url: str = settings.KB_ECOMM_URL,
     merchant_id: str = settings.KB_ECOMM_MERCHANT_ID,
     currency: str = settings.KB_ECOMM_CURRENCY,
+    language: str = settings.KB_ECOMM_LANGUAGE,
 ):
     """Sending order request to Kapital Ecommerce API"""
     # amount must be multiplied by 1000 for the API
     amount = amount * 1000
     payload = CreateOrderPayload(
-        amount, approve_url, cancel_url, decline_url, description, merchant_id, currency
+        amount, approve_url, cancel_url, decline_url, description, merchant_id, currency, language
     ).to_xml()
     response = requests.post(
         url,

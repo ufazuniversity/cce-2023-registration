@@ -2,7 +2,7 @@
 <TKKPG>
     <Request>
         <Operation>CreateOrder</Operation>
-        <Language>RU</Language>
+        <Language>{{ language }}</Language>
         <Order>
             <OrderType>Purchase</OrderType>
             <Merchant>{{ merchant_id }}</Merchant>
