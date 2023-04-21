@@ -10,7 +10,7 @@ CREATE_ORDER_HEADERS = {"Content-Type": "application/xml"}
 
 @dataclasses.dataclass
 class CreateOrderPayload:
-    amount: int
+    amount: float
     approve_url: str
     cancel_url: str
     decline_url: str
@@ -25,16 +25,18 @@ class CreateOrderPayload:
 
 
 def create_order(
-    amount,
-    approve_url=settings.KB_ECOMM_ORDER_APPROVE_URL,
-    cancel_url=settings.KB_ECOMM_ORDER_CANCEL_URL,
-    decline_url=settings.KB_ECOMM_ORDER_DECLINE_URL,
-    description=settings.KB_ECOMM_ORDER_DESCRIPTION,
-    url=settings.KB_ECOMM_URL,
-    merchant_id=settings.KB_ECOMM_MERCHANT_ID,
-    currency=settings.KB_ECOMM_CURRENCY,
+    amount: float,
+    approve_url: str = settings.KB_ECOMM_ORDER_APPROVE_URL,
+    cancel_url: str = settings.KB_ECOMM_ORDER_CANCEL_URL,
+    decline_url: str = settings.KB_ECOMM_ORDER_DECLINE_URL,
+    description: str = settings.KB_ECOMM_ORDER_DESCRIPTION,
+    url: str = settings.KB_ECOMM_URL,
+    merchant_id: str = settings.KB_ECOMM_MERCHANT_ID,
+    currency: str = settings.KB_ECOMM_CURRENCY,
 ):
     """Sending order request to Kapital Ecommerce API"""
+    # amount must be multiplied by 1000 for the API
+    amount = amount * 1000
     payload = CreateOrderPayload(
         amount, approve_url, cancel_url, decline_url, description, merchant_id, currency
     ).to_xml()
