@@ -37,8 +37,8 @@ def create_order(
     language: str = settings.KB_ECOMM_LANGUAGE,
 ):
     """Sending order request to Kapital Ecommerce API"""
-    # amount must be multiplied by 1000 for the API
-    amount = amount * 1000
+    # amount must be multiplied by 100 for the API
+    amount = amount * 100
     payload = CreateOrderPayload(
         amount, approve_url, cancel_url, decline_url, description, merchant_id, currency, language
     ).to_xml()
