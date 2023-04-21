@@ -98,8 +98,8 @@ class OrderTicketInlineAdmin(admin.StackedInline):
 
 class KBOrderInlne(admin.TabularInline):
     model = models.KBOrder
-    fk_name = "my_order"
     readonly_fields = ["order_id", "session_id", "status", "updated"]
+    exclude = ["url"]
     can_delete = False
     extra = 0
 
