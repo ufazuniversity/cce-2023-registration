@@ -85,8 +85,10 @@ class Order(models.Model):
         except AttributeError:
             return None
 
-    def redirect_to_payment(self, request):
-        KBOrder.objects.create(my_order=self, amount=self.amount)
+    def create_kapital_ecomm_order(self) -> str:
+        # Creates a Kapital Bank order and returns the URL to redirect to
+        kb_order = KBOrder.objects.create(my_order=self, amount=self.amount)
+        return kb_order.url
 
 
 class OrderTicket(models.Model):
@@ -170,6 +172,7 @@ class KBOrder(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     order_id = models.CharField(max_length=10, unique=True)
     session_id = models.CharField(max_length=50, unique=True)
+    url = models.URLField()
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default=KB_ORDER_STATUS_PENDING
     )
@@ -181,15 +184,14 @@ class KBOrder(models.Model):
         return f"Order ID = {self.order_id}, Session ID = {self.session_id}"
 
     def save(self, *args, **kwargs):
-        url = None
         if not self.pk:
             # send request to Kapitalbank Ecommerce the first time the order is saved
             order_id, session_id, url = ecommerce.create_order(self.amount)
             self.order_id = order_id
             self.session_id = session_id
+            self.url = url
         super().save(*args, **kwargs)
-        if url is not None:
-            return shortcuts.redirect(url)
+
 
     def is_pending(self):
         return self.status == KB_ORDER_STATUS_PENDING

@@ -158,7 +158,8 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             order = models.Order.objects.create(user=user, amount=ticket.price)
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
             self.save_participant(ot, form.cleaned_data)
-            order.redirect_to_payment()
+            url = order.create_kapital_ecomm_order()
+            return shortcuts.redirect(url)
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
 
