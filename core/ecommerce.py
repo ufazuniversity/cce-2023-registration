@@ -5,6 +5,7 @@ import dataclasses
 from xml.etree import ElementTree as ET
 
 CREATE_ORDER_TEMPLATE_NAME = "ecommerce/create-order.xml"
+GET_ORDER_STATUS_TEMPLATE_NAME = "ecommerce/get-order-status.xml"
 CREATE_ORDER_HEADERS = {"Content-Type": "application/xml"}
 
 
@@ -26,15 +27,15 @@ class CreateOrderPayload:
 
 
 def create_order(
-    amount: float,
-    approve_url: str = settings.KB_ECOMM_ORDER_APPROVE_URL,
-    cancel_url: str = settings.KB_ECOMM_ORDER_CANCEL_URL,
-    decline_url: str = settings.KB_ECOMM_ORDER_DECLINE_URL,
-    description: str = settings.KB_ECOMM_ORDER_DESCRIPTION,
-    url: str = settings.KB_ECOMM_URL,
-    merchant_id: str = settings.KB_ECOMM_MERCHANT_ID,
-    currency: str = settings.KB_ECOMM_CURRENCY,
-    language: str = settings.KB_ECOMM_LANGUAGE,
+        amount: float,
+        approve_url: str = settings.KB_ECOMM_ORDER_APPROVE_URL,
+        cancel_url: str = settings.KB_ECOMM_ORDER_CANCEL_URL,
+        decline_url: str = settings.KB_ECOMM_ORDER_DECLINE_URL,
+        description: str = settings.KB_ECOMM_ORDER_DESCRIPTION,
+        url: str = settings.KB_ECOMM_URL,
+        merchant_id: str = settings.KB_ECOMM_MERCHANT_ID,
+        currency: str = settings.KB_ECOMM_CURRENCY,
+        language: str = settings.KB_ECOMM_LANGUAGE,
 ):
     """Sending order request to Kapital Ecommerce API"""
     # amount must be multiplied by 100 for the API
@@ -56,3 +57,32 @@ def create_order(
     base_url = root.find("**/URL").text
     url = f"{base_url}?ORDERID={order_id}&SESSIONID={session_id}"
     return order_id, session_id, url
+
+
+@dataclasses.dataclass
+class GetOrderStatusPayload:
+    order_id: str
+    session_id: str
+    language: str
+    merchant_id: str
+
+    def to_xml(self):
+        return loader.render_to_string(
+            GET_ORDER_STATUS_TEMPLATE_NAME, dataclasses.asdict(self)
+        )
+
+
+def get_order_status(order_id: str, session_id: str, language: str = settings.KB_ECOMM_LANGUAGE,
+                     merchant_id: str = settings.KB_ECOMM_MERCHANT_ID, url: str = settings.KB_ECOMM_URL) -> str:
+    """Get order status from Kapital Ecommerce API"""
+    payload = GetOrderStatusPayload(order_id, session_id, language, merchant_id).to_xml()
+
+    response = requests.post(
+        url,
+        data=payload,
+        headers=CREATE_ORDER_HEADERS,
+        verify=False,
+        cert=(settings.KB_ECOMM_CERT_PATH, settings.KB_ECOMM_CERT_KEY_PATH),
+    )
+    root = ET.fromstring(response.text)
+    return root.find("./Response/Order/OrderStatus").text
