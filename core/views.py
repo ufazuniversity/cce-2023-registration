@@ -45,7 +45,6 @@ def account(request):
                 "Status": order.status,
                 "Price": order.amount,
                 "Created": order.created,
-                "Updated": order.updated,
             },
             "tickets": [],
         }
