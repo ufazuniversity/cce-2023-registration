@@ -49,4 +49,4 @@ RUN chown django:django /app -R
 
 USER django
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
