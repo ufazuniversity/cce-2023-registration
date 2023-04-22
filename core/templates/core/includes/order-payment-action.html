@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% if order.is_approved == False %}
+    <div class="p-2">
+        <form action="{% url 'retry-payment' order.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Retry Payment" class="btn btn-primary">
+        </form>
+    </div>
+{% endif %}

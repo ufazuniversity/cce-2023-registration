@@ -38,7 +38,8 @@ def account(request):
     for order in orders:
         ot_set = order.orderticket_set.all()
         order_data = {
-            "order": order,
+            "is_approved": order.is_approved,
+            "id": order.pk,
             "details": {
                 "Order id": order.order_id,
                 "Status": order.status,
@@ -191,7 +192,7 @@ class KBStatusView(generic.TemplateView):
 
 
 @http_decorators.require_POST
-def retry_payment(request, order_id):
-    order = shortcuts.get_object_or_404(models.Order, order_id=order_id)
+def retry_payment(request, pk):
+    order = shortcuts.get_object_or_404(models.Order, pk=pk)
     url = order.create_kapital_ecomm_order()
     return shortcuts.redirect(url)
