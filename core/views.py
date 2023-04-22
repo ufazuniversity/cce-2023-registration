@@ -1,5 +1,4 @@
 import logging
-import random
 
 from django import http
 from django import shortcuts
@@ -197,7 +196,8 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 @method_decorator(csrf_exempt, name="dispatch")
 class KBStatusView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
-        models.KBOrder.objects.update_from_response_xml(request.POST['xmlmsg'])
+        if urls.resolve(request.path).url_name == "order-approved":
+            models.KBOrder.objects.update_from_response_xml(request.POST['xmlmsg'])
         return http.HttpResponse(status=200)
 
 
