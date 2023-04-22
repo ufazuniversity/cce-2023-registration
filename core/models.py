@@ -84,10 +84,9 @@ class Order(models.Model):
     @property
     def status(self):
         try:
-            return KBOrder.objects.filter(my_order=self).last().status
+            return self.kborder_set.last().status
         except AttributeError:
             return None
-
 
     @property
     def is_approved(self):
