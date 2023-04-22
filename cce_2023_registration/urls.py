@@ -21,6 +21,5 @@ from django.contrib import admin
 urlpatterns = [
     urls.path("admin/", admin.site.urls),
     urls.path("accounts/", urls.include("allauth.urls")),
-    urls.path("__reload__/", urls.include("django_browser_reload.urls")),
     urls.path("", urls.include("core.urls")),
 ] + static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
