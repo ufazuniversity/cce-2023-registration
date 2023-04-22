@@ -76,7 +76,7 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("created",)
 
     def __str__(self):
         return str(self.id)
@@ -188,7 +188,7 @@ class KBOrder(models.Model):
     objects = managers.KBOrderManager()
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("created",)
 
     def __str__(self):
         return f"Order ID = {self.order_id}, Session ID = {self.session_id}"
