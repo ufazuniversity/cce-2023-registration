@@ -5,6 +5,8 @@ from django import http
 from django import shortcuts
 from django import urls
 from django.contrib.auth import decorators
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseBadRequest
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators import http as http_decorators
@@ -106,6 +108,16 @@ def free_registration(request):
     return shortcuts.redirect(urls.reverse("account"))
 
 
+def create_kb_payment_order_and_redirect(order):
+    try:
+        url = order.create_kapital_ecomm_order()
+        return shortcuts.redirect(url)
+    except ValidationError as e:
+        logger.error(e)
+        return HttpResponseBadRequest(e.message)
+
+
+
 @method_decorator(decorators.login_required, name="dispatch")
 class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
     template_name = "core/buy_ticket.html"
@@ -159,8 +171,7 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
             order = models.Order.objects.create(user=user, amount=ticket.price)
             ot = models.OrderTicket.objects.create(ticket=ticket, order=order)
             self.save_participant(ot, form.cleaned_data)
-            url = order.create_kapital_ecomm_order()
-            return shortcuts.redirect(url)
+            return create_kb_payment_order_and_redirect(order)
         except (exceptions.Timeout, exceptions.HTTPError) as e:
             logger.error(e)
 
@@ -193,5 +204,4 @@ class KBStatusView(generic.TemplateView):
 @http_decorators.require_POST
 def retry_payment(request, pk):
     order = shortcuts.get_object_or_404(models.Order, pk=pk)
-    url = order.create_kapital_ecomm_order()
-    return shortcuts.redirect(url)
+    return create_kb_payment_order_and_redirect(order)
