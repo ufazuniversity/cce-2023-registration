@@ -22,4 +22,5 @@ urlpatterns = [
         name="order-canceled",
     ),
     urls.path("account", views.account, name="account"),
+    urls.path("retry-payment/<int:order_id>", views.retry_payment, name="retry-payment"),
 ]

@@ -187,3 +187,10 @@ class KBStatusView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         models.KBOrder.objects.update_from_response_xml(request.POST['xmlmsg'])
         return http.HttpResponse(status=200)
+
+
+@http_decorators.require_POST
+def retry_payment(request, order_id):
+    order = shortcuts.get_object_or_404(models.Order, order_id=order_id)
+    url = order.create_kapital_ecomm_order()
+    return shortcuts.redirect(url)
