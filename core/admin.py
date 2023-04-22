@@ -103,6 +103,7 @@ class KBOrderInlne(admin.TabularInline):
     can_delete = False
     extra = 0
 
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
@@ -116,6 +117,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def get_status(self, obj):
         return obj.status
+
     get_status.short_description = "Status"
 
     def has_change_permission(self, request, obj=None):
@@ -150,8 +152,8 @@ class ParticipantAdmin(admin.ModelAdmin):
 
     def has_meal_preference(self, obj: models.Participant):
         return obj.mealpreference is not None and (
-            obj.mealpreference.allergies is not None
-            or obj.mealpreference.special_request is not None
+                obj.mealpreference.allergies is not None
+                or obj.mealpreference.special_request is not None
         )
 
     has_meal_preference.boolean = True
@@ -169,6 +171,13 @@ class StudentParticipantAdmin(ParticipantAdmin):
 
     class Meta:
         model = models.StudentParticipant
+
+
+@admin.register(models.KBOrder)
+class KBOrderAdmin(admin.ModelAdmin):
+    list_display = ["order_id", "session_id", "amount", "status", "updated"]
+    readonly_fields = ["order_id", "session_id", "amount", "updated", "url"]
+    exclude = ["my_order"]
 
 
 admin.site.register(models.Refund, admin.ModelAdmin)
