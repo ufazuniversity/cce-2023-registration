@@ -101,6 +101,7 @@ class KBOrderInlne(admin.TabularInline):
     readonly_fields = ["order_id", "session_id", "status", "updated"]
     exclude = ["url"]
     can_delete = False
+    ordering = ["-created"]
     extra = 0
 
 
@@ -114,6 +115,7 @@ class OrderAdmin(admin.ModelAdmin):
         "get_status"
     ]
     inlines = [OrderTicketInlineAdmin, KBOrderInlne]
+    ordering = ["-created"]
 
     def get_status(self, obj):
         return obj.status
@@ -178,6 +180,7 @@ class KBOrderAdmin(admin.ModelAdmin):
     list_display = ["order_id", "session_id", "amount", "status", "updated"]
     readonly_fields = ["order_id", "session_id", "amount", "updated", "url"]
     exclude = ["my_order"]
+    ordering = ["-created"]
 
 
 admin.site.register(models.Refund, admin.ModelAdmin)
