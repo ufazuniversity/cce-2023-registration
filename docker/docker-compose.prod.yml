@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  web:
+    build: ../
+    env_file:
+      - .env.prod
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - ../certs:/certs
+    depends_on:
+      - db
+  celery:
+    build: ../
+    env_file:
+      - .env.prod
+    command: celery -A cce_2023_registration worker -l info
+    restart: unless-stopped
+    volumes:
+      - ../certs:/certs
+    depends_on:
+      - db
+      - rabbitmq
+  db:
+    image: postgres:15.2-alpine3.17
+    env_file:
+      - .env.prod
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.9.7-management-alpine
+    env_file:
+      - .env.prod
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+volumes:
+    db_data:

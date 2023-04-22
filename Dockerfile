@@ -49,4 +49,5 @@ RUN chown django:django /app -R
 
 USER django
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "cce_2023_registration.wsgi:application", "--workers", "4", "--access-logfile" , "-", "--error-logfile", "-", "--log-level", "info", "--capture-output"]
