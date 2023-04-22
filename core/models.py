@@ -88,6 +88,11 @@ class Order(models.Model):
         except AttributeError:
             return None
 
+
+    @property
+    def is_approved(self):
+        return self.kborder_set.filter(status=ORDER_STATUS_APPROVED).exists()
+
     def create_kapital_ecomm_order(self) -> str:
         # Creates a Kapital Bank order and returns the URL to redirect to
         kb_order = KBOrder.objects.create(my_order=self, amount=self.amount)
