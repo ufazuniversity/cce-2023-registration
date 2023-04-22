@@ -198,14 +198,5 @@ class KBOrder(models.Model):
             self.url = url
         super().save(*args, **kwargs)
 
-    def is_pending(self):
-        return self.status == KB_ORDER_STATUS_PENDING
-
     def is_approved(self):
         return self.status == KB_ORDER_STATUS_APPROVED
-
-    def is_declined(self):
-        return self.status == KB_ORDER_STATUS_DECLINED
-
-    def is_canceled(self):
-        return self.status == KB_ORDER_STATUS_CANCELED
