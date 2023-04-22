@@ -6,8 +6,6 @@ services:
       - ../.env
     ports:
       - "8000:8000"
-    volumes:
-      - /run/register.cce.ufaz.az.sock:/run/gunicorn.sock
     depends_on:
       - db
     restart: unless-stopped
