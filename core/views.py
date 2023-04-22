@@ -1,7 +1,9 @@
 import logging
+import datetime
 
 from django import http
 from django import shortcuts
+from django.utils import timezone
 from django import urls
 from django.contrib.auth import decorators
 from django.core.exceptions import ValidationError
@@ -10,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators import http as http_decorators
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from requests import exceptions
 
 from . import forms
@@ -111,7 +114,9 @@ def free_registration(request):
 
 def create_kb_payment_order_and_redirect(order):
     try:
-        url = order.create_kapital_ecomm_order()
+        order_id, session_id, url = order.create_kapital_ecomm_order()
+        eta = timezone.now() + datetime.timedelta(seconds=settings.KB_ECOMM_ORDER_EXPIRY_SECONDS)
+        tasks.check_and_update_order_status.apply_async((order_id, session_id), eta=eta)
         return shortcuts.redirect(url)
     except ValidationError as e:
         logger.error(e)
