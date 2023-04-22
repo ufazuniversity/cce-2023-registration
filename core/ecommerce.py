@@ -26,6 +26,17 @@ class CreateOrderPayload:
         )
 
 
+def kb_request(url, payload, headers=CREATE_ORDER_HEADERS, verify=False):
+    response = requests.post(
+        url,
+        data=payload,
+        headers=headers,
+        verify=verify,
+        cert=(settings.KB_ECOMM_CERT_PATH, settings.KB_ECOMM_CERT_KEY_PATH),
+    )
+    return response
+
+
 def create_order(
         amount: float,
         approve_url: str = settings.KB_ECOMM_ORDER_APPROVE_URL,
@@ -43,13 +54,7 @@ def create_order(
     payload = CreateOrderPayload(
         amount, approve_url, cancel_url, decline_url, description, merchant_id, currency, language
     ).to_xml()
-    response = requests.post(
-        url,
-        data=payload,
-        headers=CREATE_ORDER_HEADERS,
-        verify=False,
-        cert=(settings.KB_ECOMM_CERT_PATH, settings.KB_ECOMM_CERT_KEY_PATH),
-    )
+    response = kb_request(url, payload)
 
     root = ET.fromstring(response.text)
     order_id = root.find("**/OrderID").text
@@ -77,12 +82,6 @@ def get_order_status(order_id: str, session_id: str, language: str = settings.KB
     """Get order status from Kapital Ecommerce API"""
     payload = GetOrderStatusPayload(order_id, session_id, language, merchant_id).to_xml()
 
-    response = requests.post(
-        url,
-        data=payload,
-        headers=CREATE_ORDER_HEADERS,
-        verify=False,
-        cert=(settings.KB_ECOMM_CERT_PATH, settings.KB_ECOMM_CERT_KEY_PATH),
-    )
+    response = kb_request(url, payload)
     root = ET.fromstring(response.text)
     return root.find("./Response/Order/OrderStatus").text
