@@ -239,6 +239,7 @@ KB_ECOMM_CERT_PATH = config("KB_ECOMM_CERT_PATH")
 KB_ECOMM_CERT_KEY_PATH = config("KB_ECOMM_CERT_KEY_PATH")
 KB_ECOMM_SSL_VERIFY = config("KB_ECOMM_SSL_VERIFY", cast=bool, default=False)
 KB_ECOMM_LANGUAGE = config("KB_ECOMM_LANGUAGE", default="EN")
+KB_ECOMM_ORDER_EXPIRY_SECONDS = config("KB_ECOMM_ORDER_EXPIRY_SECONDS", cast=int, default=300)
 
 # celery settings
 CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="amqp://guest:guest@localhost:5672")
