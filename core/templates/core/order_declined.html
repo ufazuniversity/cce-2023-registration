@@ -4,8 +4,8 @@
 {% block content %}
     <section class="container py-4">
         <div class="alert alert-danger" role="alert">
-            <p class="lead">Your card has been declined. We cannot process your order. Please contact your
-                bank.</p>
+            <p class="lead">Your card has been declined. We cannot process your order. Please retry paying for your order from your
+                <a href="{% url 'account' %}">account</a>. If you still have issues please contact your bank.</p>
             <a href="/" class="text-decoration-none">Back to homepage</a>
         </div>
     </section>
