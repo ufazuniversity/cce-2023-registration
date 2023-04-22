@@ -356,17 +356,6 @@ requests = "*"
 requests-oauthlib = ">=0.3.0"
 
 [[package]]
-name = "django-browser-reload"
-version = "1.7.0"
-description = "Automatically reload your browser in development."
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-Django = ">=3.2"
-
-[[package]]
 name = "django-ckeditor"
 version = "6.5.1"
 description = "Django admin CKEditor integration."
@@ -1623,7 +1612,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "32ee2a7fb5838af0bfe5da3275ba2cf1726f993682168fa34202770c2b9adfbc"
+content-hash = "6694f949223a1772c461b8688eebcc84626a660344c57e3ed7d31712b169f5a2"
 
 [metadata.files]
 anyio = [
@@ -1933,10 +1922,6 @@ django = [
 ]
 django-allauth = [
     {file = "django-allauth-0.52.0.tar.gz", hash = "sha256:e380661ceafe55734c40102819ae720403027036f28e9f9827f0faeddc24ed5f"},
-]
-django-browser-reload = [
-    {file = "django_browser_reload-1.7.0-py3-none-any.whl", hash = "sha256:0d7cc4308ebbdf9b5637e28ee7b41ae28d4fcdf350d55ce007515b44cd10291b"},
-    {file = "django_browser_reload-1.7.0.tar.gz", hash = "sha256:712d0a4d6caa6833c8c205d4ce177b474feb45583cd6ee684c9ea7b71dd921b6"},
 ]
 django-ckeditor = [
     {file = "django-ckeditor-6.5.1.tar.gz", hash = "sha256:57cd8fb7cd150adca354cd4e5c35a743fadaab7073f957d2b7167f0d9fe1fcaf"},
