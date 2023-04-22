@@ -86,7 +86,8 @@ def get_order_status(order_id: str, session_id: str, language: str = settings.KB
 
     response = kb_request(url, payload)
     root = ET.fromstring(response.text)
-    return root.find("./Response/Order/OrderStatus").text
+    status = root.find("./Response/Order/OrderStatus").text
+    return status
 
 
 def get_order_status_from_response_xml(data: dict) -> typing.Tuple[str, str, str]:
