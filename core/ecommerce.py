@@ -26,7 +26,7 @@ class CreateOrderPayload:
         )
 
 
-def kb_request(url, payload, headers=CREATE_ORDER_HEADERS, verify=False):
+def kb_request(url, payload, headers=CREATE_ORDER_HEADERS, verify=settings.KB_ECOMM_SSL_VERIFY):
     response = requests.post(
         url,
         data=payload,
