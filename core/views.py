@@ -14,6 +14,8 @@ from requests import exceptions
 
 from . import forms
 from . import models
+from . import ecommerce
+from . import tasks
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +118,6 @@ def create_kb_payment_order_and_redirect(order):
         return HttpResponseBadRequest(e.message)
 
 
-
 @method_decorator(decorators.login_required, name="dispatch")
 class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
     template_name = "core/buy_ticket.html"
@@ -197,7 +198,14 @@ class BuyTicketView(generic.FormView, generic.detail.SingleObjectMixin):
 class KBStatusView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         if urls.resolve(request.path).url_name == "order-approved":
-            models.KBOrder.objects.update_from_response_xml(request.POST['xmlmsg'])
+            order_id, session_id, status = ecommerce.get_order_status_from_response_xml(request.POST)
+            kb_order = shortcuts.get_object_or_404(models.KBOrder, order_id=order_id)
+            kb_order.status = status
+            kb_order.save()
+            if status == models.ORDER_STATUS_APPROVED:
+                order = kb_order.my_order
+                tasks.send_payment_approved_email.delay(order.user.email, order.order_id)
+
         return http.HttpResponse(status=200)
 
 

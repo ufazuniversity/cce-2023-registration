@@ -1,3 +1,5 @@
+import typing
+
 import requests
 from django.conf import settings
 from django.template import loader
@@ -85,3 +87,13 @@ def get_order_status(order_id: str, session_id: str, language: str = settings.KB
     response = kb_request(url, payload)
     root = ET.fromstring(response.text)
     return root.find("./Response/Order/OrderStatus").text
+
+
+def get_order_status_from_response_xml(data: dict) -> typing.Tuple[str, str, str]:
+    """Get order status from Kapital Ecommerce API response XML"""
+    xml = data["xmlmsg"]
+    root = ET.fromstring(xml)
+    order_id = root.find("./Message/OrderID").text
+    session_id = root.find("./Message/SessionID").text
+    status = root.find("./Message/OrderStatus").text
+    return order_id, session_id, status
