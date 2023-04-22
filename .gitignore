@@ -130,7 +130,10 @@ dmypy.json
 .pyre/
 
 .env
+.env.*
 
 /static
 
 *.ipynb
+
+certs/
