@@ -38,10 +38,11 @@ def account(request):
     for order in orders:
         ot_set = order.orderticket_set.all()
         order_data = {
+            "order": order,
             "details": {
                 "Order id": order.order_id,
                 "Status": order.status,
-                "Price": order.paid_amount,
+                "Price": order.amount,
                 "Created": order.created,
                 "Updated": order.updated,
             },
