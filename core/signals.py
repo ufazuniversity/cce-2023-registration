@@ -1,10 +1,10 @@
 from django.core import exceptions
-from django.dispatch import receiver
-from django.db.models.signals import pre_save
+from django import dispatch
+from django.db.models import signals
 from . import models
 
 
-@receiver(pre_save, sender=models.KBOrder)
+@dispatch.receiver(signals.pre_save, sender=models.KBOrder)
 def cancel_if_order_is_approved(sender, instance: models.KBOrder, **kwargs):
     # cancel order if it is already approved
     if not instance.pk:
