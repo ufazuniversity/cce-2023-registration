@@ -75,6 +75,9 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ("-created",)
+
     def __str__(self):
         return str(self.id)
 
@@ -180,6 +183,9 @@ class KBOrder(models.Model):
     updated = models.DateTimeField(auto_now=True)
     objects = managers.KBOrderManager()
 
+    class Meta:
+        ordering = ("-created",)
+
     def __str__(self):
         return f"Order ID = {self.order_id}, Session ID = {self.session_id}"
 
@@ -191,7 +197,6 @@ class KBOrder(models.Model):
             self.session_id = session_id
             self.url = url
         super().save(*args, **kwargs)
-
 
     def is_pending(self):
         return self.status == KB_ORDER_STATUS_PENDING
