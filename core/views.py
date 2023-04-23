@@ -210,8 +210,9 @@ class KBStatusView(generic.TemplateView):
             if status == models.ORDER_STATUS_APPROVED:
                 order = kb_order.my_order
                 tasks.send_payment_approved_email.delay(order.user.email, order.order_id)
+        return shortcuts.redirect(request.path)
 
-        return http.HttpResponse(status=200)
+
 
 
 @http_decorators.require_POST
