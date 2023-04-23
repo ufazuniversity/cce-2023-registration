@@ -16,7 +16,7 @@
             <div class="alert alert-primary" role="alert">You are registered for free online attendance (Only for non-presenter participants).</div>
         {% endif %}
         <h2 class="display-5 text-center">Paid Tickets</h2>
-        <div class="alert alert-warning" role="alert">{% settings_value "NOTICE_MESSAGE" %}</div>
+{#        <div class="alert alert-warning" role="alert">{% settings_value "NOTICE_MESSAGE" %}</div>#}
         <div class="my-4">{% include 'core/includes/tickets.html' with tickets=paid_tickets %} </div>
     </section>
 {% endblock %}
